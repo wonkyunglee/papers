@@ -1,0 +1,25 @@
+\section{Experiments}
+\subsection{Datasets}
+모델의 학습과 평가에 사용된 dataset은 VirusTotal로부터 crawling된 샘플 PE 5만여개와 APK 8만여개 중 security expert가 검수하여 확진을 내린 PE 샘플 2천여개 k종의 family, APK 샘플 2만여개 l종의 family로 구성하였다.
+또한 VirusTotal에서 제공하는 수십개 이상의 AntiVirus 엔진의 탐지결과로부터 Labeling을 자동화 하였다. VirusTotal로부터 각 AntiVirus 엔진들이 탐지해낸 결과를 의미있는 word 단위로 파싱하고, 샘플들로 부터 얻어진 word token들을 대상으로 security expert가 의미있는 토큰과 그렇지 않은 토큰을 선별하는 작업을 수행하였다. 추가로, 의미 있는 토큰에 대해 중요도에 따라 우선순위를 매기도록 하였다. 이를 통해 학습 샘플에 대해 expert가 일일히 수동으로 label을 다는 시간을 줄이면서도 높은 accuracy의 label을 얻을 수 있다. 또한, 하나의 샘플에 single label이 달릴 때에 비해 multi label을 사용 할 경우 악성코드의 다양한 행위 특성을 반영하도록 모델을 학습 시킬 수 있다. 
+
+\subsection{Neural Network Details}
+Deep and wide
+
+
+\subsection{Results}
+
+표 : Performance measures of Malware IR Systems
+metric performance measures: acc, auc, tf-idf of labels(?)
+row : 기존 방법들, single, multi, weighted multi
+col : single-label classification accuracy, multilabel classification auc
+non-metric performance measure : top query results
+querying results sorted by distances
+
+\subsection{Visualization}
+semantic synchronization level
+Visualization of representations
+
+
+
+

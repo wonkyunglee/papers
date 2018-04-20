@@ -1,0 +1,25 @@
+\section{Auxiliary Task}
+
+
+\subsection{Single label classification}
+Single label classification 딥러닝 모델로 만든 Malware IR System 
+장점 : 임베딩된 벡터 representation 에 대해 kNN 해서 IR 이 가능하다.
+한계 : 사실 같은 상위카테고리인데 멀리 임베딩된다.
+해결법 : 멀티레이블 쓰
+
+\subsection{Multi label learning}
+Multi label classification 딥러닝 모델로 만든 Malware IR System 
+장점 : 같은 대분류 내의 소분류 애들이 비슷한 곳에 임베딩된다. 
+한계: inner class variance 가 너무 커서 IR 할 때 distance 계산 시 노이즈가 발생한다.
+해결법 : 메트릭러닝인 센터로스를 쓰자
+
+
+\subsection{Mutli label centerloss classification}
+장점: innerclass variance 가 줄고 interclass variance 가 늘어난다.
+한계: 태그 간 관계가 사람의 인지와 다르다
+해결법 : 태그 간 중요도를 Constraint 로 넣자
+
+\subsection{Mutli label weighted centerloss classification}
+Mutli label classification + weighted centerloss 딥러닝 모델로 만든 Malware IR System 
+장점: 태그간 관계가 사람의 인지와 같다. IR 결과가 사람이 생각하는 것과 같이 나온다.
+
