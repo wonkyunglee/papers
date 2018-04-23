@@ -8,6 +8,41 @@
 
 멀웨어 IR 시스템은  4개의 원소를 갖는 tuple 로 정의된다. h 는 멀웨어 피쳐로부터 벡터 representation 을 얻을 수 있는 임베더 함수이다. E 는 검색이 될 멀웨어의 임베딩 벡터 셋이다. d 는 입력된 쿼리와 임베딩 벡터 간 거리를 계산하는 함수이다. R 은 리트리벌 결과를 반환하는 프레임워크이다. 학습 페이즈에서는 적절한 h 를 학습하고 이를 통해 Z로부터 E를 얻는다. 리트리벌 페이즈에서는 멀웨어 샘플 쿼리 q 를 입력받고 가장 가까운 k 개의 neighbor 를 랭킹 모듈 R 을 통해 반환한다.
 
+% Table
+\begin{table}%
+\caption{Notations}
+\label{tab:one}
+\begin{minipage}{\columnwidth}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Meaning & Notation\\
+\midrule
+  Set of Malwares     & $X$ \\
+  ith malware sample  & $x_i$ \\
+  Set of single labels & $Y_s$ \\
+  Single label of ith malware    & $y_{si}$ \\
+  Extracted features of ith malware & $v_i$ \\
+  Set of extracted features   & $V$ \\
+  Set of Multilabels   & $Y_m$ \\
+  Multilabels of ith malware & $\vec{y}_{mi}$\\
+  Neural embedder & $h$ \\
+  Embedded malware vectors & $E$ \\
+  Distance measuring function & $d$ \\
+  Ranking Module & $R$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\bigskip\centering
+\footnotesize\emph{Source:} This is a table
+ sourcenote. This is a table sourcenote. This is a table
+ sourcenote.
+
+ \emph{Note:} This is a table footnote.
+\end{minipage}
+\end{table}%
+
+
 
 \subsection{Tasks}
 
