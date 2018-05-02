@@ -1,0 +1,45 @@
+\section{Evaluation}
+이번 섹션에서는 우리가 제안하는 멀웨어 IR 시스템의 성능을 여러 방법으로 평가하여, 앞에서 우리의 시스템의 강점이라고 주장했던 semantic-aware malware retrieval 태스크를 수행하였는지 확인한다. 
+
+
+
+\subsection{Datasets}
+모델의 학습과 평가에 사용된 dataset은 VirusTotal로부터 crawling된 샘플 PE 5만여개와 APK 8만여개 중 security expert가 검수하여 확진을 내린 PE 샘플 2천여개 k종의 family, APK 샘플 2만여개 l종의 family로 구성하였다.
+또한 VirusTotal에서 제공하는 수십개 이상의 AntiVirus 엔진의 탐지결과로부터 Labeling을 자동화 하였다. VirusTotal로부터 각 AntiVirus 엔진들이 탐지해낸 결과를 의미있는 word 단위로 파싱하고, 샘플들로 부터 얻어진 word token들을 대상으로 security expert가 의미있는 토큰과 그렇지 않은 토큰을 선별하는 작업을 수행하였다. 추가로, 의미 있는 토큰에 대해 중요도에 따라 우선순위를 매기도록 하였다. 이를 통해 학습 샘플에 대해 expert가 일일히 수동으로 label을 다는 시간을 줄이면서도 높은 accuracy의 label을 얻을 수 있다. 또한, 하나의 샘플에 single label이 달릴 때에 비해 multi label을 사용 할 경우 악성코드의 다양한 행위 특성을 반영하도록 모델을 학습 시킬 수 있다. 
+
+
+\subsection{Hyperparameters}
+
+
+\subsection{Auxiliary Task}
+
+
+\subsection{Querying Quantitative Test}
+
+표 : Performance measures of Malware IR Systems
+
+metric performance measures: acc, auc, tf-idf of labels(?)
+
+row : 기존 방법들, single, multi, weighted multi
+col : single-label classification accuracy, multilabel classification auc
+
+non-metric performance measure : top query results
+
+
+\subsection{Querying Qualitative Test}
+
+\textbf{Visualizations.}
+semantic synchronization level
+Visualization of representations
+
+\textbf{Querying results sorted by distances. }
+
+
+
+\subsection{Generalization}
+입력 Feature 가 Semantics-aware feature 일 수록 새로운 샘플에 대한 Error 가 더 작다. 우리가 제안한 목적함수는 멀티 레이블과 레이블 별 중요도로부터 해당 샘플이 시멘틱 스페이스에서 어디에 위치해야하는지를 가이드해준다. 따라서 Train Samples 에 대해서는 데이터의 입력 Feature가 Semantic-aware 하지 않더라도 원하는 곳에 특징 표현 벡터를 위치시킬 수 있다. 하지만 새로 보는 샘플의 representation vector 가 우리가 원하는 곳에 위치하게 된다는 보장은 없다. 딥러닝의 하이러키컬 특징 표현 학습이 MWC loss 를 통해 가이드 되는 Semantic을 학습할 수 있도록 하려면 입력 Feature가 충분히 Semantics-aware 해야 하고, 이에 관련된 연구들은 섹션2에서 소개하였다. 
+
+우리는 이 차이를 보이기 위해 semantics-aware level 이 다른 두 가지 피쳐에 대해 벡터 표현을 학습시키고, validation set 의 벡터 표현이 Semantic space 위에 잘 위치하는지 확인하는 실험을 한다. 첫 번째 실험에 사용되는 피쳐는 간단한 정적 분석을 통해 얻을 수 있는 Size, entropy\citep{} 이고, 두 번째 실험에 사용되는 피쳐는보다 조금 더 Semantics-aware 한 피쳐인 Thumbnail\citep{} 이다. 위에서 진행한 정량 평가와 정성 평가를 두 실험에 대해 진행해 본 결과 더 semantics-aware한 피쳐를 입력으로 사용할 수록 평가의 결과가 좋았고 이는 즉 Generalization 이 더 된다는 것을 의미한다. 즉, 누구라도 더 Semantics-aware한 피쳐를 입력으로 넣어줄 수 있다면, 간단히 Add-on 가능한 MWC loss 를 사용하여 훌륭한 Semantic space 를 구축할 수 있게 된다. 
+
+% 시간이 된다면 APK Call-graph 도... 하면 좋을텐데..  
+

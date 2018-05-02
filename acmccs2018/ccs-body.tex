@@ -12,7 +12,7 @@
 
 따라서 classification model 을 검증하는데에 사용할 수 있으면서도 동시에 위에서 언급한 보안 전문가의 두번째 태스크인 deep dive 에도 도움을 줄 수 있는 멀웨어 IR System 에 대한 니즈가 증가하고 있다.  
  
-기존 멀웨어 IR system 은 크게 LSH나 imphash와 같은 hand-craft Feature representation 을 사용하는 시스템과, ML을 트레이닝시키며 얻은 automatically extracted feature representation 을 사용하는 시스템이 있다. 전자의 장점은 False Negative 가 낮다는 것이지만, generalization 이 잘 안된다는 단점이 있다.[] 더 좋은 generalization 을 위해 후자의 기법들이 개발되었지만, 멀웨어 representation location 이 사람의 시멘틱 스페이스와 어긋나있다는 단점이 IR 결과의 정상 평가 결과(?)를 낮추고 있다.   
+기존 멀웨어 IR system 은 크게 LSH나 imphash와 같은 hand-craft Feature representation 을 사용하는 시스템과, ML을 트레이닝시키며 얻은 automatically extracted feature representation 을 사용하는 시스템이 있다. 전자의 장점은 False Negative 가 낮다는 것이지만, generalization 이 잘 안된다는 단점이 있다.[] 더 좋은 generalization 을 위해 후자의 기법들이 개발되었지만, 멀웨어 representation location 이 사람의 시멘틱 스페이스와 어긋나있다는 단점이 IR 결과의 정성 평가 결과(?)를 낮추고 있다.   
 
 우리는 이러한 문제들을 해결하고 사람의 인지 스페이스와 멀웨어 임베딩 스페이스가 일치하는 멀웨어 IR 시스템을 제안한다. 또한 우리는 멀웨어 인포메이션 리트리벌 시스템을 만들 때의 어려운 점들과 그 문제들을 어떻게 해결했는지를 설명한다. 그리고 쿼링 결과를 시각적으로 보여서 우리의 인지와 임베딩 스페이스가 얼마나 일치하는지 확인한다. % 문장이 좀 셈. 
 
@@ -28,17 +28,12 @@
 
 % contribution 에 centerloss 어그멘트했다고쓰기.
 
-\input{related_works}
 \input{background}
-\input{malware_ir_system}
-\input{design_and_implement}
-
-\input{auxiliary_task}
-\input{retrieval_task}
-\input{experiments}
+\input{overview}
+\input{semantics_aware_representational_learning}
+\input{evaluation}
 \input{future_works}
-
-
+\input{related_works}
 \section{Conclusions}
 
 우리는 딥러닝을 활용하여 멀웨어 리트리벌 시스템을 만드는 데에서 생겼던 문제들을 새로운 로스를 정의함으로써 해결했다. 특히 기존 방법들보다 [제너럴라이제이션] 측면에서 좋다는 것을 정량적, 시각적으로 증명했다. 이는 수많은 보안 전문가들의 업무 코스트를 낮춰줄 수 있을 것이라 믿는다.

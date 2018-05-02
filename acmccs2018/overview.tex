@@ -1,7 +1,6 @@
 \section{Malware Information Retrieval System}
 % 목표하는 바
-
-우리가 제안하는 malware IR 시스템은 벡터 학습 과 리트리벌 두 페이즈로 나뉜다. 두 페이즈에서 사용될 노테이션들을 정의하고, 이들을 이용해서 각 페이즈에서 어떤 태스크를 행해야하는지를 설명한다. 
+이번 세션에서는 제안된 malware information retreival system 의 동작과 구성 그리고 가져야하는 속성들을 설명한다. 우리의 시스템은 크게 학습과 검색(retrieval), 두 페이즈로 나뉜다. 학습 페이즈에서는 원할한 검색을 위해 시멘틱스를 반영하는 학습 데이터의 표현 벡터를 학습한다. 검색 페이즈에서는 유저로부터 입력된 멀웨어 혹은 태그 쿼리와 미리 저장해놓은, 학습된 표현 벡터들로부터 랭킹 결과를 출력한다. 이어지는 서브 섹션에서는 두 페이즈에서 사용될 노테이션들을 정의하고, 이들을 이용해서 각 페이즈에서 어떤 태스크를 행해야하는지를 자세히 설명한다.  
 
 
 \subsection{Notations}
@@ -45,7 +44,6 @@ Meaning & Notation\\
 \end{table}%
 
 
-
 \subsection{Tasks}
 
 학습페이즈에서는 IR system 에서 사용하기 위한 벡터 리프레젠테이션을 얻기 위한 Auxiliary Task를 수행한다. Auxiliary Task 는 멀웨어 분류 태스크를 학습하는 것으로 싱글 레이블 클래시피케이션이나 멀티레이블 클래시피케이션이 될 수 있다. $f: V \rightarrow Y $ 인 f 는 멀웨어 피쳐로부터 레이블을 추정하는 함수이다. 함수 $f$ 는 다시 $g$ 와 $h$ 의 합성 함수로 정의할 수 있다. $h$ 는 위에서 설명한, 멀웨어 피쳐로부터 vector representation 을 얻을 수 있는 임베딩 함수이다. $g$는 임베딩으로부터 label 을 추정할 수 있는 클래시파이어이다.  
@@ -64,7 +62,49 @@ g(e_i) = \sigma (w*e_i + b)
 Results = \{x_j | j = argmin_i( {-d(e_q, e_i)} )  \}
 \]
 
-\subsection{Desired Properties for Malware IR systems}
+
+\subsection{Modules}
+% 어떻게 풀었는지
+
+두 페이즈의 구조도는 Figure 과 같다. 두 페이즈에서 공통으로 존재하는 모듈은 Feature Extractor와 Neural Embedder 가 있다. 벡터 학습 페이즈에는 Classifier 가, 리트리벌 페이즈에는 랭킹 모듈이 포함되어있다. 
+% Figure
+\begin{figure}
+  \includegraphics[width=\linewidth]{../figures/train_phase.pdf}
+  \caption{train phase}
+  \label{fig:one}
+\end{figure}
+% Figure
+\begin{figure}
+  \includegraphics[width=\linewidth]{../figures/retrieval_phase.pdf}
+  \caption{retrieval phase}
+  \label{fig:two}
+\end{figure}
+
+
+\textbf{Feature Extractor. }
+Feature extractor 는 Malware Rawdata 로부터 Handcrafted feature 를 추출하는 모듈이다. Handcrafted feature로 PE 같은경우에는 Size 와 Entropy, Histogram of API Calls, … 등을[*] 추출한다. APK 같은 경우에는 추가적으로 Permission,  … 등의 피쳐를 추출한다. 
+
+
+\textbf{Neural Embedder. }
+Neural embedder 는 Feature extractor 모듈에서 추출된 멀웨어의 피쳐들로부터 Representation vector 를 뽑는 모듈이다. theta 로 Parameterized 되어있는 뉴럴 네트워크이며, 파라미터는 벡터 학습 페이즈에서 Auxiliary Task 를 수행하면서 Optimize 된다. 그리고 리트리벌 페이즈에서 파라미터는 freeze 되어 업데이트되지 않는다. 
+Neural Embeder 의 네트워크 구조는 Deep and wide 를 사용하였다. Thumbnail 을 받아서 CNN 5 층을 통과시킨 벡터와 나머지 feature 들을 받아서 fully 2 층을 통과시킨 벡터를 concatenate 하고, fully 2 층을 추가로 쌓은 구조를 사용한다. 이렇게 함으로써 우리가 얻을 수 있는 효과는 feature 의 성격에 따라 다른 네트워크 구조로 임베딩 피쳐벡터를 추출함으로써 더 나은 generalization 성능을 얻을 수 있다는 것이다. thumbnail 피쳐는 [malimg 논문 인용] 악성 코드영역 혹은 악성코드를 특징짓는 영역의 로컬리 시프트 인베리언트한 특성을 담기 위해 CNN 을 사용해서 임베딩 피쳐벡터를 추출한다. 
+
+
+\textbf{Classifier. }
+% Figure
+\begin{figure}
+  \includegraphics[height=10cm]{../figures/neural_embedder.pdf}
+  \caption{neural embedder}
+  \label{fig:three}
+\end{figure}
+Classifier 모듈은 Neural embedder 를 통과해서 나온 embedding vector 를 받아서 각 레이블 별 확률을 출력해준다. 1층의 fully connected 로 파라미터라이즈드 되어있으며 태스크에 따라 softmax 혹은 sigmoid Activation을 사용하였다. Neural Embeder 모듈과 마찬가지로 벡터 학습 페이즈에서 back propagation 에 의해 파라미터들이 학습되고, 리트리벌 페이즈에서는 프리즈된다. 
+
+
+\textbf{Ranking Module. }
+학습 페이즈에 저장해두었던 학습 셋의 임베딩 벡터들과 추출된 벡터의 거리를 거리함수 d 를 사용하여 측정하고 k 개의 nearest neighborhood 를 가까운 순서대로 정렬하고 뱉어낸다.
+
+
+\subsection{Desired properties}
 멀웨어 IR 시스템은 한계들이 존재했다. 특히 Raw binary file 로부터 좋은 피쳐를 뽑기가 수월하지 않고, intraclass variance 는 크고 innerclass variance 는 작으며 계속해서 변종과 새로운 종이 생겨나는 멀웨어 도메인의 특징으로 말미암아 좋은 멀웨어 IR 시스템이 가져야 할 속성들은 다른 도메인의 IR 시스템과는 조금 다르다.
 
 \textbf{Semantic understanding. }
@@ -87,4 +127,6 @@ Results = \{x_j | j = argmin_i( {-d(e_q, e_i)} )  \}
 
 \textbf{Efficiency. }
 세상에 존재하는 멀웨어 샘플 개수는 너무나도 많고 기하급수적으로 늘어나고 있기도 하다. 따라서 수많은 샘플들에서 k 개의 상위 랭크된 결과를 적절한 시간 내에 retrieve 하려면 랭킹 모듈이 효율적이어야한다.
+
+
 
