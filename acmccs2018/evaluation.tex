@@ -2,67 +2,265 @@
 이번 섹션에서는 우리가 제안하는 멀웨어 IR 시스템의 성능을 여러 방법으로 평가하여, 앞에서 우리의 시스템의 강점이라고 주장했던 semantic-aware malware retrieval 태스크를 수행하였는지 확인한다. 
 
 
+\begin{table*}[!htb]%apk_result
+\caption{APK19000 Querying Results}
+\label{tab:apk_result}
+\begin{minipage}{\textwidth}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Dataset             & \multicolumn{6}{c|}{Querying trainset}                      & \multicolumn{6}{c|}{Querying validset}                      \\ \hline
+Metric              & \multicolumn{3}{c|}{AP}  & \multicolumn{3}{c|}{weighted AP} & \multicolumn{3}{c|}{AP}  & \multicolumn{3}{c|}{weighted AP} \\ \hline
+k              & top1   & top10  & top100 & top1      & top10     & top100   & top1   & top10  & top100 & top1      & top10     & top100   \\ \hline
+center+weight(sum)  & 0.9846 & 0.9743 & 0.9374 & 0.9869    & 0.9802    & 0.955    & 0.8717 & 0.862  & 0.8272 & 0.8808    & 0.8746    & 0.8534   \\ \hline
+center+weight(avg) & 0.9856 & 0.9772 & 0.9481 & 0.9855    & 0.9779    & 0.9528   & 0.8929 & 0.8837 & 0.8559 & 0.8893    & 0.8815    & 0.8591   \\ \hline
+center(sum)         & 0.9843 & 0.9737 & 0.9358 & 0.984     & 0.9733    & 0.9388   & 0.8736 & 0.8676 & 0.8373 & 0.8752    & 0.872     & 0.8462   \\ \hline
+center(avg)        & 0.987  & 0.9776 & 0.9474 & 0.9872    & 0.9776    & 0.9472   & 0.8845 & 0.8779 & 0.8562 & 0.8892    & 0.8829    & 0.8631   \\ \hline
+multi               & 0.9764 & 0.9617 & 0.9115 & 0.9752    & 0.9593    & 0.9094   & 0.8871 & 0.8713 & 0.8184 & 0.8869    & 0.8704    & 0.8236   \\ \hline
+single              & 0.9035 & 0.8727 & 0.8061 & 0.9004    & 0.8667    & 0.7946   & 0.8489 & 0.8231 & 0.7446 & 0.8434    & 0.8151    & 0.733    \\ \hline
+\end{tabular}
+\end{center}
+\bigskip\centering
+\end{minipage}
+\end{table*}%
+
+
+\begin{table*}[!htb]%pe_result
+\caption{PE1300 Querying Results}
+\label{tab:pe_result}
+\begin{minipage}{\textwidth}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Dataset             & \multicolumn{6}{c|}{Queyring trainset}                      & \multicolumn{6}{c|}{Queyring validset}                      \\ \hline
+Metric              & \multicolumn{3}{c|}{AP}  & \multicolumn{3}{c|}{weighted AP} & \multicolumn{3}{c|}{AP}  & \multicolumn{3}{c|}{weighted AP} \\ \hline
+k              & top1   & top10  & top100 & top1      & top10     & top100   & top1   & top10  & top100 & top1      & top10     & top100   \\ \hline
+center+weight(sum)  & 1      & 1      & 0.9487 & 1         & 1         & 0.9329   & 0.9082 & 0.9075 & 0.8875 & 0.8816    & 0.881     & 0.8547   \\ \hline
+center+weight(avg) & 1      & 1      & 0.9613 & 1         & 1         & 0.9671   & 0.9203 & 0.9186 & 0.9029 & 0.9142    & 0.9085    & 0.8916   \\ \hline
+center(sum)         & 1      & 1      & 0.9483 & 1         & 1         & 0.9319   & 0.9058 & 0.9058 & 0.8839 & 0.8845    & 0.8845    & 0.8487   \\ \hline
+center(avg)        & 1      & 1      & 0.9544 & 1         & 1         & 0.965    & 0.9179 & 0.9179 & 0.8999 & 0.9048    & 0.9048    & 0.888    \\ \hline
+multi               & 0.9877 & 0.9665 & 0.7949 & 0.9877    & 0.9668    & 0.7793   & 0.8913 & 0.8894 & 0.8033 & 0.8666    & 0.8676    & 0.7692   \\ \hline
+single              & 0.9647 & 0.9004 & 0.7397 & 0.9608    & 0.8961    & 0.7235   & 0.8865 & 0.8597 & 0.7805 & 0.8784    & 0.8413    & 0.7501   \\ \hline
+\end{tabular}
+\end{center}
+\bigskip\centering
+
+\end{minipage}
+\end{table*}%
+
+
+
+
+
 \subsection{Implementation and Setup}
 \textbf{Datasets. } 
 모델의 학습과 평가에 사용된 dataset은 VirusTotal로부터 [언제부터 언제까지] crawling된 샘플들 중 security expert가 검수하여 확진을 내린 샘플들로 구성되어있다. 또한 VirusTotal에서 제공하는 수십개 이상의 AntiVirus 엔진의 탐지결과로부터 Labeling을 자동화 하였다. VirusTotal로부터 각 AntiVirus 엔진들이 탐지해낸 결과를 의미있는 word 단위로 파싱하고, 샘플들로 부터 얻어진 word token들을 대상으로 security expert가 의미있는 토큰과 그렇지 않은 토큰을 선별하는 작업을 수행하였다. 추가로, 의미 있는 토큰에 대해 중요도에 따라 우선순위를 매기도록 하였다. 이를 통해 학습 샘플에 대해 expert가 일일히 수동으로 label을 다는 시간을 줄이면서도 높은 accuracy의 label을 얻을 수 있다. 또한, 하나의 샘플에 대표 레이블과 멀티레이블 두 종류의 레이블을 부여했으며, 멀티 레이블에는 대표 레이블이 포함된다. 
 
 \begin{itemize}
-	\item{ \textbf{Dataset 1. PE1300. } VirusTotal로부터 crawling된 샘플들 PE 5만여개 중 security expert가 검수하여 확진을 내린 PE 샘플 1300여개 11종의 labels. 이 중 8개는 대표 레이블이며 대표 레이블에 대한 샘플들의 수는 거의 같다. 즉 대표 레이블에 대한 샘플의 분포는 유니폼하다.
+	\item{ \textbf{Dataset 1. PE1300. } VirusTotal로부터 crawling된 샘플들 PE 5만여개 중 security expert가 검수하여 확진을 내린 PE 샘플 1300여개 11종의 labels. 이 중 8개는 대표 레이블이며 대표 레이블에 대한 샘플들의 수는 거의 같다. 즉 대표 레이블에 대한 샘플의 분포는 유니폼하다. 데이터셋과 테스트셋은 7:3으로 랜덤샘플링해서 나누었다.
 	}
-	\item{ \textbf{Dataset 2. APK19000. } VirusTotal로부터 crawling된 샘플들 APK 8만여개 중 security expert가 검수하여 확진을 내린 APK 샘플 2만여개 83종의 labels. 이 중 19개는 대표 레이블이며 대표 레이블에 대한 샘플의 수는 1000개로 같다. PE 데이터셋과 마찬가지로 대표 레이블에 대한 샘플의 분포는 유니폼하다.  
+	\item{ \textbf{Dataset 2. APK19000. } VirusTotal로부터 crawling된 샘플들 APK 8만여개 중 security expert가 검수하여 확진을 내린 APK 샘플 2만여개 83종의 labels. 이 중 19개는 대표 레이블이며 대표 레이블에 대한 샘플의 수는 1000개로 같다. PE 데이터셋과 마찬가지로 대표 레이블에 대한 샘플의 분포는 유니폼하다. 그리고 데이터셋과 테스트셋은 7:3으로 랜덤샘플링해서 나누었다.
 	}
 \end{itemize}
 
-
-
 \textbf{Hyperparameters. }
-- layers, learning rate, train/valid ratio, Label importances, 
+실험에 사용되었던 하이퍼파라미터들은 다음과 같다. 옵티마이져로는 Adam optimizer 를 사용했고 learning rate 는 0.001 을 사용했다. Centerloss 에서의 $\alpha$ 는 0.1을 사용하였다. PE1300 데이터셋을 학습시킬때는 cross-entropy loss 와 centerloss 의 비율을 의미하는 $\lambda$ 값으로 0.1을, APK19000을 학습할때는 0.001 을 사용하였다. 뉴럴네트워크의 구조로는 batch normalization을 사용한 CNN 5층 과 Fully Connected 2층이다. representation vector 를 output 으로 갖는 마지막에서 하나 전 층은 leaky relu(0.2) 를 사용하였고 나머지 activation function 은 모두 relu 를 사용하였다. representation vector 의 dimension 은 100을 사용하였다. 
 
+\textbf{Models. }
+실험에 사용된 모델은 총 6가지이다. Single label 모델은 Loss function 으로 softmax-cross-entropy 를 사용하여 대표 레이블을 분류하는 Auxiliary Task 를 학습한 모델로, 우리 실험의 baseline 이다. Multi label 은  Loss function 으로 sigmoid cross-entropy 를 사용하여 학습시킨 모델로 여러 레이블을 multi task 로 분류하도록 설계된 딥러닝 모델로, 우리 실험의 두 번째 baseline 이다. 다음으로 Centerloss 를 적용시킨 효과를 알아보기 위해서 멀티레이블 모델에 centerloss 를 추가하였는데, 이는 semantic components 를 평균으로 조합하는 모델과 더하여 조합하는 모델이 있다. 그리고 scoring의 효과를 알아보기 위해 여기에 importance coefficient 를 constraint 로 추가한 weighted center loss 모델이 있다. 마찬가지로 average 과 summation 두 버젼이 있다. 
 
-\textbf{Hancrafted Feature Extraction}
-- Thumbnail
-- Size, Entropy
-- Call histogram
-
-
-\subsection{Auxiliary Task Evaluation}
-Auxiliary task 의 정확도는 더 안좋지만 쿼리 결과는 더 좋은 경우가 있다. 이는 Malware Semantic space의 구축 상태를 평가하기에 Auxiliary Task 의 정량 평가만으로는 부족하다는 것을 의미한다. 
 
 
 \subsection{Querying Quantitative Test}
-- metric performance measures
-	- acc, precision, recall, auc, 등 label 겹치는 정도를 수치로 정량화
-	- inner class variance 측정 후 센터로스 유무에 대해 비교. 
-- Single label, Multi label, Centerloss(Mean, Add) , Weighted Center loss(Mean, Add)
-- Train data querying , Valid data querying
 
-앞서 Malware Semantic Space 란 사람이 중요하다고 생각하는 레이블이 많이 겹칠 수록 가까이 있도록, 그리고 그렇지 않을 수록 멀리 있도록 멀웨어 샘플들의 표현 벡터를 위치시킨 공간이라고 설명한 바 있다. 그리고 Malware Semantic Space 의 표현 벡터들을 이용하여 MIR 을 구축했을 때 중요한 레이블이 비슷한 샘플들을 검색할 수 있을 것이라고 했다. MWC Loss 를 사용하여 MIR System 을 구축했을 때 위의 정량 수치가 대체적으로 더 높다는 것은 곧 다른 Objective function 을 사용했을 때보다 Semantics 을 더 잘 학습했다고 볼 수 있고 이는 MIR System 의 Desired property 1 번인 Semantic Understanding 속성을 다른 로스들에 비해 더 만족시킨다.  
+이번 파트에서는 각 모델 별로 멀웨어 샘플로 Querying 하여 얻은  Precision at K 값, 그리고 representation vector 의 class variance 의 비교 통해 로스의 효과를 분석해본다. 
+
+\textbf{Metrics. } 정량 평가에 사용된 메트릭들을 소개한다. Malware IR System 의 성능을 평가하기 위한 Precision과, Scoring 을 평가하기 위한 Weighted Precision 그리고 intra, inter class variance 를 사용하였다. 
+\begin{itemize}
+	\item{ \textbf{Precision at top K} 
+
+
+	Querying sample $q$의 Labels 를 $y_{q1}, y_{q2}, ... y_{q_m}$라고 하자. Ranking module $R$ 을 통해 얻은 k개의 검색 결과 샘플 $r_1, r_2, ..., r_k$의 Labels 를 각각 $y_{r1}, y_{r2}, ..., y_{r_l}$이라고 하자. 이럴 때 Precision at top K 는 다음과 같이 구해진다. 
+	\[
+	Precision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|}}{  \sum_{k=1}^{K}{ |Y_{r_k}| }  }}
+	\]\\
+	where $|Y|$ is the number of elements of set $Y$.
+	}
+	\item{ \textbf{Weighted Precision at top K } 
+	
+	Weighted Preicision 는 Precision 과 같은 방식으로 구하되, 각 label의 importance coefficient를 가중하여 더해준다. 이 메트릭은 중요하다고 여기는 레이블에 대해서 잘 검색해줄 수록 값이 높게 나온다. 
+	\[
+	WeightedPrecision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|_w}}{  \sum_{k=1}^{K}{ |Y_{r_k}|_w }  }}
+	\]\\
+	where $|Y|_w = \sum_i{c_{y_i}}$ and $c_j$ is importance coefficient of j'th label.
+	}
+	\item{ \textbf{inner class variance} 
+	
+	Inner class variance 는 같은 클래스 내 샘플들의 representaion vector 의 Variance 를 나타낸다. 즉, 같은 클래스 끼리 얼마나 모여있는지를 측정하는 메트릭이다. 우리 샘플들은 Multi label 을 갖고 있기때문에, 같은 label 의 조합을 가진 샘플들에 대해서 Variance 를 측정하고 이를 평균 내었다.   
+	}
+	\item{ \textbf{inter class variance} 
+	
+	Inter class variance 는 다른 클래스끼리 얼마나 떨어져있는지를 나타내는 메트릭이다. 역시 Multi label 이기 때문에, label의 조합이 다른 샘플들과 자신의 차이 벡터들의 Variance 를 측정하고 이를 평균내었다. 
+	}
+	%\item{ \textbf{inter class variance over inner class variance} 
+	%inter cliass variance 대비 inner class variance 를 측정하여 여러 모델의 임베딩 벡터 셋들이 얼마나 IR 이 잘 비교할 수 있게 된다.}
+\end{itemize}
+
+
+\textbf{Sample Querying Results. }
+Table.\ref{tab:apk_result} 와 Table.\ref{tab:pe_result}의 결과로부터, 우리는 다음의 관측을 할 수 있었다. 
+첫 째, Precision at K 값이 Centerloss 를 사용했을 때 Multilabel 베이스라인 모델보다 더 좋다. 특히 K 가 커질수록 multilabel 베이스라인 모델의 Precision 값은 급격히 떨어지지만 centerloss 모델들은 그렇지 않다. 
+둘 째, Weighted AP 의 값이 centerloss 에 importance coefficient 를 추가한 모델들이 아닌 모델들보다 더 좋다. 
+셋 째, semantic components 의 combination 방법으로 average 사용하는 것이 summation 를 사용하는것 보다 살짝 더 성능이 좋다는 것을 관측했다.
+
+위의 실험으로부터 우리는 Multilabel Centerloss 를 사용하여 MIR System 을 구축했을 때 위의 정량 수치가 그렇지 않을 때보다 대체적으로 더 높다는 것을 확인할 수 있었고, 이는 MIR System 의 Desired property 1 번인 Semantic Understanding 속성을 다른 방법들에 비해 더 만족시킨다는 것을 알 수 있다. 또한 weighted centerloss 를 사용하여, 딥러닝을 이용하여 만든 IR 시스템에서도 scoring 이 가능하다는 것을 보였다. 
+
+\begin{table*}[!htb]%class_variances
+\caption{Class Variances}
+\label{tab:class_variances}
+\begin{minipage}{\textwidth}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+Dataset             & \multicolumn{3}{c|}{APK19000}                               & \multicolumn{3}{c|}{PE1300}                                             \\ \hline
+Variance              & intraclass  & interclass  & inter/intra & intraclass  & interclass  & inter/intra  \\ \hline
+center+weight(sum)  & 0.0473              &         2.793       &     59.0486             & 0.129               &              2.169 &              16.8140    \\ \hline
+center+weight(avg) & 0.0101              &              1.1906 &    117.8812             & 0.0361              &                    1.2698 &      35.1745                   \\ \hline
+center(sum)         & 0.2268              &                    5.2967 &          23.3541               & 0.1748              &              1.8299       &    10.4685                     \\ \hline
+center(mean)        & 0.0258              &                    1.2785 &           49.5543              & 0.1332              &        1.6826             &     12.6321                    \\ \hline
+multi               & 2.4956              &                    21.8435 &       8.7528                    & 25833.582           &        840.54             &        0.0325               \\ \hline
+single              & 1.2103              &                    15.18 &            12.5423             & 2310.7649           &      267.683               &           0.1158              \\ \hline
+\end{tabular}
+\end{center}
+\bigskip\centering
+\end{minipage}
+\end{table*}%
+\begin{table}[!htb]%auxiliary_result 
+\caption{Auxiliary Task Results}
+\label{tab:auxiliary_result}
+\begin{minipage}{\columnwidth}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Dataset             & APK19000 & PE1300 \\ \hline
+center+weight(sum)  & 0.9618   & 0.9801 \\ \hline
+center+weight(avg) & 0.9636   & 0.9812 \\ \hline
+center(sum)         & 0.9728   & 0.9753 \\ \hline
+center(avg)        & 0.9705   & 0.9574 \\ \hline
+multi               & 0.9606   & 0.9495 \\ \hline
+single              & 0.9508   & 0.946  \\ \hline
+\end{tabular}
+\end{center}
+\bigskip\centering
+\end{minipage}
+\end{table}%
+
+\textbf{Class variances. }
+우리는 위의 결과를 얻을 수 있었던 원인을 파악하기 위해 class variance 를 측정하였고 결과는 Table.\ref{tab:class_variances}에서 볼 수 있다. centerloss 를 사용하면 inner class variance 가 줄어든다는 것을 확인했다. 더불어 모델들의 상대적인 class variance 를 측정하기 위해, 각 모델의 임베딩 벡터들의 intra class variance 와 inter class variance 를 측정하고 둘을 나누어서 비교하였다. interclass variance / intraclass variance 의 값이 클수록 representation vector들이 discriminative 하다는 의미이므로 리트리벌 결과가 더 좋아질 수 있다는 것을 추론해볼 수 있다. 
+
+\textbf{Auxiliary Task Results. }
+Table.\ref{tab:auxiliary_result} 은 Auxiliary task 의 Validation set 에 대한 AUC 를 나타낸다. Auxiliary task 는 Malware IR System 에서 사용할 representation vector 를 학습시키기 위한 서브태스크이지만 centerloss 를 사용할 경우 약간의 성능 향상을 확인할 수 있었다. 이는 centerloss 를 사용함으로써 Discriminative feature learninig\cite{wen2016discriminative}을 수행하였고, 이를 통해 Generalization 효과를 얻은 것으로 해석해 볼 수 있다.
 
 
 \subsection{Querying Qualitative Test}
-\textbf{Visualizations.}
-- PCA : Variance of inner class 가 작고 variance of inter class 가 크다는 것을 눈으로 보여줌. 더불어 주요 태그를 함께 보유하고 있다면 보틀넥이 가까운 곳에 위치함을 보여줌으로써 우리의 제안 방법을 통해 Malware Semantic space 가 구축되었다는 것을 보여줌.
-vector space 에서 연산 관계가 있음을 보여줌.  
+이번 파트에서는 섹션4.1에서 소개한 세 가지 방법으로 우리가 구축한 MIR 시스템에 쿼링을 하여 얻은 top k 개의 결과를 리스팅한다. 그리하여 우리의 proposal 을 통해 Malware Information Retrieval System 의 성능이 좋아졌다는 것을 보여준다. 각 쿼링 테스스트는 Figure.\ref{fig:qualitative_all} 의 왼쪽, 중앙 그리고 오른쪽 그림에서 쿼링 방법을 확인할 수 있다.
 
 \textbf{Querying by malware sample. }
-MWC 를 사용하여 학습시킨 MIR 시스템과 그렇지 않은 시스템에 대하여 멀웨어 샘플을 쿼링하여 얻은 top k 개의 결과를 리스팅하여 기재함으로써 MWC Loss 가 Malware Semantic space 를 구축하는데 도움이 된다는 것을 보여준다.
+agnet, slocker, jisut, ransom 이렇게 4개의 semantic component 를 갖는 APK 멀웨어 샘플을 model A, model B, 그리고 centerloss(sum) 모델로 학습한 MIR 시스템에 각각 쿼링하였다. 리트리벌 결과는 Table.\ref{tab:sample_query_result} 에서 관측할 수 있다. 다른 두 모델보다 centerloss(sum) 모델로 학습한 시스템이 쿼링 결과가 좋다는 것을 확인할 수 있다. 
+\[
+   query = e_q 
+\]
 
 
-\textbf{Querying by labels. }
-레이블들을 쿼링하여 동일 레이블 조합을 갖고 있는 top k 개의 결과를 리스팅하여 기재함으로써 단순히 Data retrieval system이 아니라 Information retrieval system 을 설계한 것이라는 것을 보여줌. 
+% Table
+\begin{table*}%sample_query_result
+\caption{Queyring by sample}
+\label{tab:sample_query_result}
+\begin{minipage}{\textwidth}
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\multicolumn{1}{c}{Semantics of queried sample}   & top & \multicolumn{1}{c}{center(sum)} & \multicolumn{1}{c}{multi}     & \multicolumn{1}{c}{single}             \\ \midrule
+\multicolumn{1}{c}{agent, slocker, jisut, ransom} & 1   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
+                                                  & 2   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
+                                                  & 3   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
+                                                  & 4   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & dropper, agent, slocker, jisut, ransom \\
+                                                  & 5   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
+                                                  & 6   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & dropper, agent, slocker, jisut, ransom \\
+                                                  & 7   & agent, slocker, jisut, ransom  & slocker, jisut, ransom        & slocker                                \\
+                                                  & 8   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
+                                                  & 9   & agent, slocker, jisut, ransom  & slocker, jisut, ransom        & agent, slocker, jisut, ransom          \\
+                                                  & 10  & agent, slocker, jisut, ransom  & slocker, jisut, ransom        & slocker, jisut, ransom                 \\ \bottomrule
+\end{tabular}
+\end{center}
+\bigskip\centering
+\end{minipage}
+\end{table*}%
+
+\textbf{Querying by semantic components. }
+다음 테스트는 semantic components 를 쿼링하여 그런 의미를 갖는 샘플들을 리트리브하는 것이다. centerloss(sum) 모델로 학습한 APK Malware Information Retrieval 시스템을 대표로 테스트했으며, 쿼리로는 agent, ewind, downloader 에 해당하는 semantic component vector 의 합을 사용하였다. 
+\[
+   query = s_{\text{agent}} + s_{\text{ewind}} + s_{\text{downloader}}  
+\]
+결과는 Table.\ref{tab:semantics_query_result} 에서 확인할 수 있다. 우리 학습 데이터셋 안에 agent, ewind, downloader 세 semantic component 만을 갖고 있는 샘플은 총 89개이다. top 90 까지의 샘플 안에 모두 검색된 것을 확인할 수 있었다. 
+
+% Table
+\begin{table*}%semantics_query_result
+\caption{Quering by semantics}
+\label{tab:semantics_query_result}
+\begin{minipage}{\textwidth}
+\begin{center}
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Queried semantic \\ components\end{tabular}} & top        & \multicolumn{1}{c}{centerloss(sum)} \\ \midrule
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}agent, ewind,  downloader\end{tabular}}    & 1$\sim$86  & agent, ewind, downloader            \\
+                                                                                           & 87         & agent, ewind, downloader, ransom    \\
+                                                                                           & 88$\sim$90 & agent, ewind, downloader            \\
+                                                                                           & 91         & agent, ewind, downloader, ransom    \\
+                                                                                           & 92         & agent, ewind, downloader, ransom    \\
+                                                                                           & 93         & downloader, agent, ewind, fakeinst  \\
+                                                                                           & 94         & ewind, downloader                   \\ \bottomrule
+\end{tabular}
+\end{center}
+\bigskip\centering
+\end{minipage}
+\end{table*}%
 
 
-\subsection{Center Vector Combination Methods}
-Mean, Add 방법의 차이를 위의 결과들로부터 설명.
+\textbf{Querying by the combination of semantics and sample. }
+마지막으로, 멀웨어 샘플에 어떤 시멘틱 컴포넌트들을 더하거나 빼서 쿼링하는 테스트를 하였다. 위의 두 실험과 마찬가지로, APK 에 대해 실험했다. 실험에 사용된 APK 샘플은 smsreg, agent, smspay, smssend 네 개의 시멘틱 컴포넌트를 갖고 있다. 이 샘플에서 smssend component 를 빼고 dropper component 를 더하여 쿼리문을 작성하였다. 
+\[
+   query = e_q - s_{\text{smssend}} + s_{\text{dropper}} 
+\]
+우리 학습 데이터셋 안에 smsreg, agent, smspay, dropper 네 semantic components 를 가진 데이터는 총 56개이고, top 69 안에 모두 검색된 것을 확인할 수 있었다. 
+% Table
+\begin{table*}%sample_and_semantics_query_result
+\caption{Querying by the combination of semantics and sample}
+\label{tab:sample_and_semantics_query_result}
+\begin{minipage}{\textwidth}
+\begin{center}
+\begin{tabular}{llcl}
+\hline
+\multicolumn{2}{c}{Query}                                                                    & \multirow{2}{*}{top} & \multicolumn{1}{c}{\multirow{2}{*}{centerloss(sum)}} \\
+\multicolumn{1}{c}{Sample}                         & \multicolumn{1}{c}{Semantic components} &                      & \multicolumn{1}{c}{}                                 \\ \hline
+\multicolumn{1}{c}{smsreg, agent, smspay, smssend} & - smssend + dropper                     & 1$\sim$34            & smsreg, dropper, agent, smspay                       \\
+                                                   &                                         & 35                   & smsreg, dropper, smspay                              \\
+                                                   &                                         & 36$\sim$45           & smsreg, dropper, agent, smspay                       \\
+                                                   &                                         & 46                   & mobilepay, smsreg, dropper,agent, smspay             \\
+                                                   &                                         & 47$\sim$49           & smsreg, dropper, agent, smspay                       \\
+                                                   &                                         & 50                   & smsreg, dropper, agent, smspay, dowgin               \\
+                                                   &                                         & 51                   & smsreg, dropper, agent, smspay                       \\ \hline
+\end{tabular}
+\end{center}
+\bigskip\centering
+\end{minipage}
+\end{table*}%
 
-\textbf{add center vectors. } 
-
-
-
-\subsection{Generalization}
-입력 Feature 가 Semantics-aware feature 일 수록 새로운 샘플에 대한 Error 가 더 작다. 우리가 제안한 목적함수는 멀티 레이블과 레이블 별 중요도로부터 해당 샘플이 시멘틱 스페이스에서 어디에 위치해야하는지를 가이드해준다. 따라서 Train Samples 에 대해서는 데이터의 입력 Feature가 Semantic-aware 하지 않더라도 원하는 곳에 특징 표현 벡터를 위치시킬 수 있다. 하지만 새로 보는 샘플의 representation vector 가 우리가 원하는 곳에 위치하게 된다는 보장은 없다. 딥러닝의 하이러키컬 특징 표현 학습이 MWC loss 를 통해 가이드 되는 Semantic을 학습할 수 있도록 하려면 입력 Feature가 충분히 Semantics-aware 해야 하고, 이에 관련된 연구들은 섹션2에서 소개하였다. 
-
-우리는 이 차이를 보이기 위해 semantics-aware level 이 다른 두 가지 피쳐에 대해 벡터 표현을 학습시키고, validation set 의 벡터 표현이 Semantic space 위에 잘 위치하는지 확인하는 실험을 한다. 첫 번째 실험에 사용되는 피쳐는 간단한 정적 분석을 통해 얻을 수 있는 Size, entropy\citep{} 이고, 두 번째 실험에 사용되는 피쳐는보다 조금 더 Semantics-aware 한 피쳐인 Thumbnail\citep{} 이다. 위에서 진행한 정량 평가와 정성 평가를 두 실험에 대해 진행해 본 결과 더 semantics-aware한 피쳐를 입력으로 사용할 수록 평가의 결과가 좋았고 이는 즉 Generalization 이 더 된다는 것을 의미한다. 즉, 누구라도 더 Semantics-aware한 피쳐를 입력으로 넣어줄 수 있다면, 간단히 Add-on 가능한 MWC loss 를 사용하여 훌륭한 Semantic space 를 구축할 수 있게 된다. 
+%
+%\subsection{Generalization}
+%입력 Feature 가 Semantics-aware feature 일 수록 새로운 샘플에 대한 Error 가 더 작다. 우리가 제안한 목적함수는 멀티 레이블과 레이블 별 중요도로부터 해당 샘플이 시멘틱 스페이스에서 어디에 위치해야하는지를 가이드해준다. 따라서 Train Samples 에 대해서는 데이터의 입력 Feature가 Semantic-aware 하지 않더라도 원하는 곳에 특징 표현 벡터를 위치시킬 수 있다. 하지만 새로 보는 샘플의 representation vector 가 우리가 원하는 곳에 위치하게 된다는 보장은 없다. 딥러닝의 하이러키컬 특징 표현 학습이 MWC loss 를 통해 가이드 되는 Semantic을 학습할 수 있도록 하려면 입력 Feature가 충분히 Semantics-aware 해야 하고, 이에 관련된 연구들은 섹션2에서 소개하였다. 
+%
+%우리는 이 차이를 보이기 위해 semantics-aware level 이 다른 두 가지 피쳐에 대해 벡터 표현을 학습시키고, validation set 의 벡터 표현이 Semantic space 위에 잘 위치하는지 확인하는 실험을 한다. 첫 번째 실험에 사용되는 피쳐는 간단한 정적 분석을 통해 얻을 수 있는 Size, entropy\citep{} 이고, 두 번째 실험에 사용되는 피쳐는보다 조금 더 Semantics-aware 한 피쳐인 Thumbnail\citep{} 이다. 위에서 진행한 정량 평가와 정성 평가를 두 실험에 대해 진행해 본 결과 더 semantics-aware한 피쳐를 입력으로 사용할 수록 평가의 결과가 좋았고 이는 즉 Generalization 이 더 된다는 것을 의미한다. 즉, 누구라도 더 Semantics-aware한 피쳐를 입력으로 넣어줄 수 있다면, 간단히 Add-on 가능한 MWC loss 를 사용하여 훌륭한 Semantic space 를 구축할 수 있게 된다. 
 
 % 시간이 된다면 APK Call-graph 도... 하면 좋을텐데..  
 

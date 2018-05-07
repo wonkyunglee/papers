@@ -1,16 +1,4 @@
 \section{Introduction}
-%흐름
-%1. 보안 업무가 점점 힘들어진다.
-%2. 피쳐 엔지니어링과 머신러닝으로 보안 전문가에게 도움을 주고자 했다.
-%3. 동적 피쳐는 얻기 어렵고, 정적 피쳐인 Syntactic/ structural feature 로는 시멘틱을 담기 어렵다.
-%3. Semantics - aware 라는 말은, 사람이 생각하는 멀웨어 샘플들간의 관계가 담겨있다는 뜻이다. 구조적으로 다르다고 해도 멀웨어의 행위가 일치하면 같은 의미를 갖는 샘플이라고 볼 수 있다. 마찬가지로 구조적으로 거의 같다고 해도 멀웨어의 행위가 전혀 다르다면 두 샘플은 다른 의미를 가졌다고 할 수 있다. 더불어 우리는 Locky 와 Cerber 라는 두 랜섬웨어 패밀리에 해당하는 샘플 간 유사도가 Locky 와 Coinminer 에 해당하는 두 샘플의 유사도보다 더 작다고 생각한다. 이러한 샘플들 간 의미 차이 까지 담고 있는 피쳐를 Symantics-aware 피쳐 라고 할 수 있다. 
-%3. 신택틱 피쳐로 시멘틱을 담아보려고 보안 전문가가 피쳐 엔지니어링을 해서 악성 행위의 구조적 패턴을 조금 더 잘 검출하는 피쳐를 획득할 수 있었지만, 복잡한 시멘틱까지 표현하는 머신러닝 모델을 만들기 위해서는 다양한 도메인에서 증명된 딥러닝같은 특징 표현 학습 기법을 멀웨어 도메인에 적용하는것을 고려해야한다.
-%4. 특히 딥러닝은 전문가에 의해 피쳐 엔지니어링 된 피쳐들 뿐만 아니라, malware 바이너리, 소스코드, 메타데이터, 리소스, 동적 행위로그, 스크린샷 등 엔지니어링 되지 않은 인풋들에 대해서도 레이턴트 피쳐 표현을 배울 수 있다는 이점이 있다.
-%5. 그렇다면 좋은 인풋 feature 와 딥러닝의 레이턴트 피쳐 표현 학습 능력이 있다면 멀웨어의 의미 관계까지 배울 수 있는가? 못한다. 이유는 패밀리 네이밍이 안좋아서. 그렇게 얻은 표현 레이턴트 피쳐 표현은 거의 동일한 멀웨어들은 거리가 가깝고 동일하지 않은 멀웨어들은 거리가 멀 뿐 그 거리로부터 어떤 리즈닝을 할 수 없다. 
-%6. 그러면 어떻게 해야 멀웨어의 시멘틱을 딥러닝으로 학습할 수 있는가? 우리의 방법은 이러하다. 우리는 멀웨어 샘플의 의미(Semantics)를 벡터로 모델링하고 그 공간이 시멘틱 스페이스가 되도록 하였다. 그 방법으로는 첫 째, 멀웨어의 표현 벡터를 시멘틱 컴퍼넌트 벡터들의 리니어 컴비내이션이 되도록 학습하여 특정 의미를 갖게 하였다. 둘 째, 제안된 메트릭 러닝 방법을 통해 멀웨어 표현 벡터 스페이스에서 정의된 거리가 샘플들 간 의미의 차이를 반영하도록 학습하였다.
-%
-
-
 
 
 하루에 30만개 이상의 멀웨어가 생성되고 있고 이 숫자는 계속 늘어나고 있다. %ref
@@ -34,16 +22,17 @@ Traditionally Semantic-aware Feature 를 사용해서 Semantics 를 담는 시�
 
 그렇다면 좋은 인풋 feature 와 딥러닝의 레이턴트 피쳐 표현 학습 능력이 있다면 멀웨어의 의미 관계까지 배울 수 있는가? 자연어 도메인에서는 의미 관계를 학습하기 위해서 문장에서의 앞 뒤 관계를 활용하거나[word2vec] 컨텍스트에 기반하여 co-occurence 를 확률적으로 표현한 메트릭스를 활용하는[GloVe?] 등, Self- supervised 방법을 활용한다. 하지만 멀웨어는 self-supervised learning 을 할 만한 요소가 없기 때문에, supervised learning 을 통해 의미 관계를 학습시키는 방법을 사용해볼 수 있다. 지금까지 알려진 대부분의 Deep Learning 기반 Malware Classifier는 어떤 파일이 어떤 malware family로 명명되어 있는 지를 분류하도록 가르친다. 하지만 이를 학습시켜서 얻은 representation latent feature 들은 거리가 가까우면 거의 동일한 멀웨어이고 거리가 멀면 동일하지 않은 멀웨어라는 것을 알 수 있을 뿐, 거리의 차이가 의미의 차이를 표현해주지는 않는다.  
 
-%더불어 가르친 Malware family 가 너무 대분류라면 공통 피쳐를 학습할 수 없어서 외워버리게 되고 overfitting 하게 될 것이고 너무 소분류라면 애초에 뽑을 공통 피쳐가 없을 것이기 때문에 역시 새 샘플에 대응하기가 힘들 것이다. 
-그러면 어떻게 해야 멀웨어의 시멘틱을 딥러닝으로 학습할 수 있는가? 악성 프로퍼티는 여러개이고 []. 우리는 정제된 멀티 레이블을 제공하여 딥러닝 모델이 학습할 Semantics를 지도해주었다. 그리고 멀웨어의 표현 벡터를 시멘틱 컴퍼넌트 벡터들의 리니어 컴비내이션이 되도록 학습하여 특정 의미를 갖게 하였다. 또한 우리가 제안한 메트릭 러닝 방법을 통해, 벡터 스페이스에서의 멀웨어 샘플들 간 거리가 의미의 차이와 같아지도록 학습하였다. 그리하여 멀웨어 샘플의 의미(Semantics)를 벡터로 표현할 수 있는 멀웨어 시멘틱 스페이스를 디자인할 수 있었다. 
+그러면 어떻게 해야 멀웨어의 시멘틱을 딥러닝으로 학습할 수 있는가? 하나의 멀웨어가 가질 수 있는 악성 행위 혹은 속성은 여러개가 될 수 있다. 멀웨어의 시멘틱을 악성 행위 혹은 속성들이 의미하는 시멘틱 컴포넌트들의 조합이라고 생각해볼 수 있다. 따라서 우리는 멀웨어의 태그들을 정제하여 딥러닝 모델에게 제공하였고 이를 통해 딥러닝 모델이 학습할 멀웨어의 Semantics를 지도해주었다. 학습 과정에서는 멀웨어의 표현 벡터를 시멘틱 컴퍼넌트 벡터들의 리니어 컴비내이션이 되도록 학습하여 특정 의미를 갖게 하였다. 또한 우리가 제안한 메트릭 러닝 방법을 통해, 벡터 스페이스에서의 멀웨어 샘플들 간 거리가 의미의 차이와 같아지도록 학습하였다. 그리하여 멀웨어 샘플의 의미(Semantics)를 벡터로 표현할 수 있는 멀웨어 시멘틱 스페이스를 얻을 수 있었다. 
 
-이렇게 학습된 Semantic Space에서 의미적으로 유사한 멀웨어 또는 어떤 semantic의 차이를 갖는 malware, 혹은 특정 의미를 갖는 멀웨어들을 검색할 수 있는 유연한 IR system을 소개한다. 그리고 정량 평가와 정성 평가를 통해 시멘틱 스페이스가 얼마나 잘 만들어졌는지 확인한다.  
+우리가 제안한 메트릭 러닝 방법은 센터로스[cite]를 어그멘트해서 설계한 Multilabel Centerloss Obejctive function을 크로스 엔트로피 로스와 함께 사용하는 것이다. 이 로스 펑션의 역할은 멀웨어의 Representation vector 가 그것의 시멘틱스 벡터와 가깝게 하는 것이다. 이 것의 장점은 어디에든 쉽게 붙일 수 있다는 것이며 구현이 어렵지 않다는 것이다. 더불어 Information Retrieval Task 에서 사용하던 Scoring 기법과 동이랗게, 특정 시멘틱 컴포넌트에 Weight를 부여하여 다른 컴포넌트들보다 랭킹에 큰 역할을 할 수 있도록 제약을 줄 수 있다.  
+
+이렇게 학습된 Semantic Space에서 의미적으로 유사한 멀웨어 또는 어떤 semantic의 차이를 갖는 malware, 혹은 특정 의미를 갖는 멀웨어들을 검색할 수 있는 유연한 IR system을 소개한다. 더불어 딥러닝을 활용하여  그리고 정량 평가와 정성 평가를 통해 시멘틱 스페이스가 얼마나 잘 만들어졌는지 확인한다.  
 
 우리의 메인 컨트리부션은 이렇게 요약할 수 있다.
 
 \begin{itemize}
-\item 우리는 악성코드의 Semantics를 벡터로 모델링하고 어떤 악성코드의 latent feature representation을 semantic components의 linear combination으로 표현할 수 있는 Semantics Space 위에 임베딩했다. 그리고 이를 학습하기 위한 Deep Learning 기반 Malware Classifier의 구조를 제안한다.
-\item 우리는 Malware Classifier가 학습하는 Semantic Space에서 metric function이 semantics의 차이를 학습하기 위해 multilabel centerloss에 기반한 Metric Learning 기법을 제안한다.
+\item 우리는 악성코드의 Semantics를 벡터로 모델링하고 어떤 악성코드의 latent feature representation을 semantic components의 linear combination으로 표현할 수 있는 Semantics Space 위에 임베딩했다. 그리고 이를 학습하기 위해 Deep Learning 기반 Malware Classifier를 사용한다.
+\item 우리는 Malware Classifier가 학습하는 Semantic Space에서 metric function이 semantics의 차이를 의미하도록 학습하기 위해 multilabel centerloss에 기반한 Metric Learning 기법을 제안한다.
 \item 학습된 Semantic Space에 존재하는 멀웨어 샘플 벡터들에 대해 멀웨어, 시멘틱, 멀웨어와 시멘틱의 조합 세 가지 방법으로 malware를 검색할 수 있는 유연한 IR system을 소개하고 그 성능을 평가한다.
 \end{itemize}
 
@@ -59,7 +48,7 @@ Traditionally Semantic-aware Feature 를 사용해서 Semantics 를 담는 시�
 \input{related_works}
 \section{Conclusions}
 
-우리는 딥러닝을 활용하여 멀웨어 리트리벌 시스템을 만드는 데에서 생겼던 문제들을 새로운 로스를 정의함으로써 해결했다. 특히 기존 방법들보다 [제너럴라이제이션] 측면에서 좋다는 것을 정량적, 시각적으로 증명했다. 이는 수많은 보안 전문가들의 업무 코스트를 낮춰줄 수 있을 것이라 믿는다.
+우리는 이 페이퍼에서, deep learning 을 활용하여 malware information retrieval system 을 만드는 방법을 소개했다. 그리고 시스템이 semantic understanding 속성을 갖게 하기 위하여, 제안된 Loss function 인 multilabel centerloss 를 사용하여 semantic space 를 approximate 하였다. 우리가 제안한 방법으로 만든 MIR 시스템에 멀웨어 샘플, 시멘틱 컴포넌트들, 멀웨어 샘플과 시멘틱 컴포넌트의 조합 이렇게 세 가지 방법으로 쿼리를 하였다. 그리고 정량, 정성 평가 결과를 통해 제안된 방법이 시스템을 semantic-aware 하게 만들었음을 보였다. 
 
 \appendix
 
