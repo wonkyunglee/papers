@@ -69,43 +69,6 @@ single              & 0.9647 & 0.9004 & 0.7397 & 0.9608    & 0.8961    & 0.7235 
 \textbf{Models. }
 실험에 사용된 모델은 총 6가지이다. Single label 모델은 Loss function 으로 softmax-cross-entropy 를 사용하여 대표 레이블을 분류하는 Auxiliary Task 를 학습한 모델로, 우리 실험의 baseline 이다. Multi label 은  Loss function 으로 sigmoid cross-entropy 를 사용하여 학습시킨 모델로 여러 레이블을 multi task 로 분류하도록 설계된 딥러닝 모델로, 우리 실험의 두 번째 baseline 이다. 다음으로 Centerloss 를 적용시킨 효과를 알아보기 위해서 멀티레이블 모델에 centerloss 를 추가하였는데, 이는 semantic components 를 평균으로 조합하는 모델과 더하여 조합하는 모델이 있다. 그리고 scoring의 효과를 알아보기 위해 여기에 importance coefficient 를 constraint 로 추가한 weighted center loss 모델이 있다. 마찬가지로 average 과 summation 두 버젼이 있다. 
 
-
-
-\subsection{Querying Quantitative Test}
-
-이번 파트에서는 각 모델 별로 멀웨어 샘플로 Querying 하여 얻은  Precision at K 값, 그리고 representation vector 의 class variance 의 비교 통해 로스의 효과를 분석해본다. 
-
-\textbf{Metrics. } 정량 평가에 사용된 메트릭들을 소개한다. Malware IR System 의 성능을 평가하기 위한 Precision과, Scoring 을 평가하기 위한 Weighted Precision 그리고 intra, inter class variance 를 사용하였다. 
-\begin{itemize}
-	\item{ \textbf{Precision at top K} 
-
-
-	Querying sample $q$의 Labels 를 $y_{q1}, y_{q2}, ... y_{q_m}$라고 하자. Ranking module $R$ 을 통해 얻은 k개의 검색 결과 샘플 $r_1, r_2, ..., r_k$의 Labels 를 각각 $y_{r1}, y_{r2}, ..., y_{r_l}$이라고 하자. 이럴 때 Precision at top K 는 다음과 같이 구해진다. 
-	\[
-	Precision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|}}{  \sum_{k=1}^{K}{ |Y_{r_k}| }  }}
-	\]\\
-	where $|Y|$ is the number of elements of set $Y$.
-	}
-	\item{ \textbf{Weighted Precision at top K } 
-	
-	Weighted Preicision 는 Precision 과 같은 방식으로 구하되, 각 label의 importance coefficient를 가중하여 더해준다. 이 메트릭은 중요하다고 여기는 레이블에 대해서 잘 검색해줄 수록 값이 높게 나온다. 
-	\[
-	WeightedPrecision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|_w}}{  \sum_{k=1}^{K}{ |Y_{r_k}|_w }  }}
-	\]\\
-	where $|Y|_w = \sum_i{c_{y_i}}$ and $c_j$ is importance coefficient of j'th label.
-	}
-	\item{ \textbf{inner class variance} 
-	
-	Inner class variance 는 같은 클래스 내 샘플들의 representaion vector 의 Variance 를 나타낸다. 즉, 같은 클래스 끼리 얼마나 모여있는지를 측정하는 메트릭이다. 우리 샘플들은 Multi label 을 갖고 있기때문에, 같은 label 의 조합을 가진 샘플들에 대해서 Variance 를 측정하고 이를 평균 내었다.   
-	}
-	\item{ \textbf{inter class variance} 
-	
-	Inter class variance 는 다른 클래스끼리 얼마나 떨어져있는지를 나타내는 메트릭이다. 역시 Multi label 이기 때문에, label의 조합이 다른 샘플들과 자신의 차이 벡터들의 Variance 를 측정하고 이를 평균내었다. 
-	}
-	%\item{ \textbf{inter class variance over inner class variance} 
-	%inter cliass variance 대비 inner class variance 를 측정하여 여러 모델의 임베딩 벡터 셋들이 얼마나 IR 이 잘 비교할 수 있게 된다.}
-\end{itemize}
-
 \begin{table*}[!htb]%class_variances
 \caption{Class Variances}
 \label{tab:class_variances}
@@ -147,6 +110,43 @@ single              & 0.9508   & 0.946  \\ \hline
 \bigskip\centering
 \end{minipage}
 \end{table}%
+
+
+\subsection{Querying Quantitative Test}
+
+이번 파트에서는 각 모델 별로 멀웨어 샘플로 Querying 하여 얻은  Precision at K 값, 그리고 representation vector 의 class variance 의 비교 통해 로스의 효과를 분석해본다. 
+
+\textbf{Metrics. } 정량 평가에 사용된 메트릭들을 소개한다. Malware IR System 의 성능을 평가하기 위한 Precision과, Scoring 을 평가하기 위한 Weighted Precision 그리고 intra, inter class variance 를 사용하였다. 
+\begin{itemize}
+	\item{ \textbf{Precision at top K} 
+
+
+	Querying sample $q$의 Labels 를 $y_{q1}, y_{q2}, ... y_{q_m}$라고 하자. Ranking module $R$ 을 통해 얻은 k개의 검색 결과 샘플 $r_1, r_2, ..., r_k$의 Labels 를 각각 $y_{r1}, y_{r2}, ..., y_{r_l}$이라고 하자. 이럴 때 Precision at top K 는 다음과 같이 구해진다. 
+	\[
+	Precision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|}}{  \sum_{k=1}^{K}{ |Y_{r_k}| }  }}
+	\]\\
+	where $|Y|$ is the number of elements of set $Y$.
+	}
+	\item{ \textbf{Weighted Precision at top K } 
+	
+	Weighted Preicision 는 Precision 과 같은 방식으로 구하되, 각 label의 importance coefficient를 가중하여 더해준다. 이 메트릭은 중요하다고 여기는 레이블에 대해서 잘 검색해줄 수록 값이 높게 나온다. 
+	\[
+	WeightedPrecision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|_w}}{  \sum_{k=1}^{K}{ |Y_{r_k}|_w }  }}
+	\]\\
+	where $|Y|_w = \sum_i{c_{y_i}}$ and $c_j$ is importance coefficient of j'th label.
+	}
+	\item{ \textbf{inner class variance} 
+	
+	Inner class variance 는 같은 클래스 내 샘플들의 representaion vector 의 Variance 를 나타낸다. 즉, 같은 클래스 끼리 얼마나 모여있는지를 측정하는 메트릭이다. 우리 샘플들은 Multi label 을 갖고 있기때문에, 같은 label 의 조합을 가진 샘플들에 대해서 Variance 를 측정하고 이를 평균 내었다.   
+	}
+	\item{ \textbf{inter class variance} 
+	
+	Inter class variance 는 다른 클래스끼리 얼마나 떨어져있는지를 나타내는 메트릭이다. 역시 Multi label 이기 때문에, label의 조합이 다른 샘플들과 자신의 차이 벡터들의 Variance 를 측정하고 이를 평균내었다. 
+	}
+	%\item{ \textbf{inter class variance over inner class variance} 
+	%inter cliass variance 대비 inner class variance 를 측정하여 여러 모델의 임베딩 벡터 셋들이 얼마나 IR 이 잘 비교할 수 있게 된다.}
+\end{itemize}
+
 
 
 \textbf{Sample Querying Results. }
