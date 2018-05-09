@@ -1,7 +1,7 @@
 \begin{figure*}[!htb] % concept
-  \includegraphics[width=\textwidth]{../../figures/concept.pdf}
-  \caption{The concept of our proposed method. Left figure shows PCA plot of representation vectors which are trained by single label classificaion task. Center figure shows the vectors trained by training single label classification task with centerloss. We observe that of center figure's intra-class variance model is smaller than left figure's.
-  Right figure shows the vectors which are trained by multi-label classification task with multi-label centerloss. It shows that representation vectors whose semantics are simliar are nearly located then others. 
+  \includegraphics[width=\textwidth]{../../figures/concept_fix.pdf}
+  \caption{The concept of our proposed method. Figure(a) shows PCA plot of representation vectors which are trained by single label classificaion task. Figure(b) shows the vectors trained by training single label classification task with centerloss. We observe that of center figure's intra-class variance model is smaller than left figure's.
+  Figure(c) shows the vectors which are trained by multi-label classification task with multi-label centerloss. It shows that representation vectors whose semantics are simliar are nearly located then others. 
 %  
 %  왼쪽 그림은 그냥 싱글레이블 클래시피케이션 태스크를 학습해서 얻은 리프레젠 테이션 벡터의 PCA plot이다.
 %  	가운데 그림은 싱글레이블 클래시피케이션 태스크를 센터로스를 적용하여 학습해서 얻은 리프레젠테이션 벡터의 PCA plot 이다. 왼쪽 그림에 비해서 intra class variance 가 줄어들었을을 그림에서 확인할 수 있다. 오른쪽 그림은 multilabe 클래싶피케이션 테스크를 센터로스를 적용해서 학습해서 얻은 리퍼르제네테이션 벡터의 Pca plot이다. 왼쪽과 가운데 그림에 비하여 semantically similar sample의 벡터들이 가깝게 위치하였음을 확인할 수 있다. 
@@ -41,8 +41,8 @@ If we approximate the semantic space well, then the following querying tasks sho
 
 \subsection{Solution Overview}
 \begin{figure*}[!htb] % qualitative_all
-  \includegraphics[width=\textwidth]{../../figures/qualitative_all_fix.pdf}
-  \caption{Our malware retrieval system was queried in three ways: malware samples(left), semantic components(center) and a combination of malware samples and semantic components(reight).}
+  \includegraphics[width=\textwidth]{../../figures/qualitative_all_fix2.pdf}
+  \caption{Our malware retrieval system was queried in three ways: malware samples(a), semantic components(b) and a combination of malware samples and semantic components(c).}
   \label{fig:qualitative_all}
 \end{figure*}
 
@@ -139,15 +139,15 @@ The process of parameters and semantic component update can be found in Figure. 
 \SetKwFunction{Ftarget}{getTargetSemanticVectors}
 \SetKwFunction{Fnew}{getNewSemanticComponentVectors}
 
-\KwIn{Extracted handcrafted features of training data $v_i$ and their semantic components $\mathbf{y}_i$. Initialized parameters $\theta$ in neural embedder. parameters $W, b$ in classifier. initialized semantic component vectors $\mathbf{s}$.Importance coefficients $\textbf{c}$. Hyperparameter $\lambda$, $\alpha$, learning rate $\mu$. }
-\KwOut{The parameters $\theta$, $W$, $b$ }
+\KwIn{Extracted handcrafted features of training data $v_i$ and their semantic components $\mathbf{y}_i$. Initialized parameters $\theta$ in neural embedder. parameters $W, \mathbf{b}$ in classifier. initialized semantic component vectors $\mathbf{s}$.Importance coefficients $\textbf{c}$. Hyperparameter $\lambda$, $\alpha$, learning rate $\mu$. }
+\KwOut{The parameters $\theta$, $W$, $\mathbf{b}$ }
 \Repeat{converge}{
-    $s_\text{target} = \Ftarget(s_{\mathbf{y}})$ \\
+    $\mathbf{s}_\text{target} = \Ftarget(\mathbf{s}_{\mathbf{y}})$ \\
 	Compute total loss by $L = L_s + \lambda L_c$\\
 	Update parameters $\theta$ by $\theta \leftarrow \theta - \mu \frac{\partial L}{\partial\theta}$ \\
 	Update parameters $W$ by $W \leftarrow W - \mu \frac{\partial L}{\partial W}$\\
-	Update parameters $b$ by $b \leftarrow b - \mu \frac{\partial L}{\partial b}$\\	
-	Update semantic component vectors $s$ by $s \leftarrow \Fnew()$
+	Update parameters $\mathbf{b}$ by $\mathbf{b} \leftarrow \mathbf{b} - \mu \frac{\partial L}{\partial \mathbf{b}}$\\	
+	Update semantic component vectors $S$ by $S \leftarrow \Fnew(S, \mathbf{s}_{\text{target}}, \mathbf{e}, \alpha, \mathbf{c})$
 	
 
 	}
@@ -180,17 +180,17 @@ The process of parameters and semantic component update can be found in Figure. 
   \;
     
   \SetKwProg{Pn}{Function}{:}{}
-  \Pn{\Fnew{$\mathbf{s}$, $s_{\text{target}}$, $e$, $\alpha$, $\mathbf{c}$}}{
+  \Pn{\Fnew{$\mathbf{s}$, $s_{\text{target}}$, $\mathbf{e}$, $\alpha$, $\mathbf{c}$}}{
     $M \leftarrow $ The number of semantic components \\
     \ForEach{$i \in \{1, 2, ..., C\}$}{
 	  \If{Summation Model}
-	  {$s_i \leftarrow s_i - \frac{\alpha}{M}(s_{\text{target}} - e)$}
+	  {$\mathbf{s}_i \leftarrow \mathbf{s}_i - \frac{\alpha}{M}(s_{\text{target}} - e)$}
 	  \ElseIf{Average Model}
-	  {$s_i \leftarrow s_i - \alpha (s_{\text{target}} - e)$ }
+	  {$\mathbf{s}_i \leftarrow \mathbf{s}_i - \alpha (s_{\text{target}} - e)$ }
 	  \If{Weighted Model}
-	  {$s_i \leftarrow \frac{s_i}{||s_i||} c_i$}    
+	  {$\mathbf{s}_i \leftarrow \frac{\mathbf{s}_i}{||\mathbf{s}_i||} c_i$}    
     }
-    \KwRet $\mathbf{s}$
+    \KwRet $S$
   }
   \;  
 

@@ -158,14 +158,14 @@ From the results of Table. \ref{tab:apk_result} and Table. \ref{tab:pe_result}, 
 From the above experiments, we can confirm that the above quantitative values ​​are generally higher when the MR system is constructed using multi-label centerloss. This shows that the semantic understanding attribute of desired property of the MR system is more satisfactory than the other methods. We also showed that scoring is possible in MR systems using weighted centerloss with deep learning.
 
 \textbf{Class variances. }
-We measured the class variance to determine the cause of the above results. The results can be seen in the table. \ref{tab:class_variances}. From this result, we confirmed that using centerloss reduces the inner-class variance. In addition, to measure the relative class variance of the models, the intra-class variance and the inter-class variance of the embedding vectors were measured and compared. The larger the value of the inter-class variance / intra-class variance is, the more discriminative the representation vectors are, meaning that retrieval results may be better.
+We measured the class variance to determine the cause of the above results. The results can be seen in the Table. \ref{tab:class_variances}. From this result, we confirmed that using centerloss reduces the inner-class variance. In addition, to measure the relative class variance of the models, the intra-class variance and the inter-class variance of the embedding vectors were measured and compared. The larger the value of the inter-class variance / intra-class variance is, the more discriminative the representation vectors are, meaning that retrieval results may be better.
 
 \textbf{Auxiliary task results. }
 Table.\ref{tab:auxiliary_result} represents the AUC for the validation set of the auxiliary task.The purpose of the original Auxiliary task is literally a subtask to learn the representation vector to be used in the MR system, but with the centerloss, we can see a slight performance improvement.
 
 
 \subsection{Querying Qualitative Test}
-In this part, we list the top k results obtained by querying the MR system we built in the three ways introduced in Section 4.1. Thus, our proposal shows that the performance of the MR system has improved. For each querying test, we can see the querying method in the figure. \ref{fig:qualitative_all}.
+In this part, we list the top k results obtained by querying the MR system we built in the three ways introduced in Section 4.1. Thus, our proposal shows that the performance of the MR system has improved. For each querying test, we can see the querying method in the Figure. \ref{fig:qualitative_all}.
 
 \textbf{Querying by malware sample. }
 A sample of the APK malware with a semantic component consisting of ``agent’’, ``slocker’’, ``jisut’’, and ``ransom’’ was queried to the learned MR system with the models described above. The retrieval result can be observed in Table. \ref{tab:sample_query_result}. The system learned by the centerloss (add) model is better than the other two models.
