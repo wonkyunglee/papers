@@ -1,0 +1,103 @@
+\documentclass[sigconf, anonymous]{acmart}
+
+\usepackage{kotex}% remove later
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage[ruled]{algorithm2e} % For algorithms
+\usepackage{multirow}
+\usepackage{algpseudocode}
+
+\renewcommand{\algorithmcfname}{ALGORITHM}
+
+
+\fancyhf{} % Remove fancy page headers 
+\fancyhead[C]{Anonymous submission \#632 to ACM CCS 2018} % TODO: replace 9999 with your paper number
+\fancyfoot[C]{\thepage}
+
+\setcopyright{none} % No copyright notice required for submissions
+\acmConference[Anonymous Submission to ACM CCS 2018]{ACM Conference on Computer and Communications Security}{Due 9 May 2018}{Toronto, Canada}
+\acmYear{2018}
+
+\settopmatter{printacmref=false, printccs=true, printfolios=true} % We want page numbers on submissions
+
+%%\ccsPaper{9999} % TODO: replace with your paper number once obtained
+
+\begin{document}
+\title{Semantics-Aware Representation Learning for \\
+Malware Retrieval} % TODO: replace with your title
+
+\begin{abstract}
+%우리는 페이퍼에서 시멘틱 어웨어 Malware Retrieval System 을 딥러닝으로 만드는 방법을 소개한다. 이래서 IR 은 필요한데 여기에선 쉽지않다. 
+%근데 우리는 이런 방법으로 문제를 해결했다. 그리고 평가로는 이런 평가를 했고 이런 결과를 보였다. 
+%샘플이 임베딩 되는 공간이 시멘틱 스페이스가 되도록 러닝한다.
+%
+
+We consider the method for creating semantics-aware malware retrieval system. Existing malware detection systems may cope with only simple malware variants. To be able to retrieve malwares which are semantically similar but structually dissimilar, systems need to understand semantics of malwares. In order to make the system have the semantic understanding attribute, we supervise the multiple labels about malicious behaviors. Also we approximate representation vector to target semantic vectors using multilabel centerloss. Experimental results show that our system has capability of retrieving semantically similar samples. Also the qualitative tests show that this model works well for following three types of queries: malware samples, semantic components and a combination of malware samples and semantic components.
+
+
+%the proposed method made the system semantics-aware. We observe that this model is work well for following three type of queries : malware samples, semantic components and a combination of malware samples and semantic components. 
+%넘쳐나는 멀웨어 obfuscation에 대응하기 위해 MR 시스템이 요구됐다. 하지만 기존 MR System에서는 structurally similar 샘플들만 검색됐다. semantic understanding 해야 semantic similar sample이 검색 가능하다. In order to make the system have the semantic understanding attribute, 우리는 멀티레이블을 슈퍼바이즈 해줬다. 그리고 we approximate the semantic space using the proposed loss function, multilabel centerloss. Our malware retrieval system was queried in three ways: malware samples, semantic components and a combination of malware samples and semantic components. The results of quantitative and qualitative evaluation showed that the proposed method made the system semantics-aware. 
+
+%
+%
+%In this paper, we propose the method for creating semantics-aware malware retrieval system. 
+%
+%
+%최근들어 멀웨어 변종 탐지와 분석 시간 단축, 신종에 대한 빠른 대처에 도움이 되는 Malware 	retrieval System에 대한 니즈가 증가하고 있다. 따라서 멀웨어의 시밀러리티를 계산하기 위한 연구들도 늘어가고 있다. 대부분의 연구들은 의미적 유사도를 잘 계산할 수 있는 Feature engineering 방법을 제안한다. 이런 피쳐들은 구하기가 어려운 동적 피쳐나 다루기 힘든 structural feature 가 대부분이고, 이를 활용해서 semantic similarity 를 계산하기는 쉽지 않다. 
+%In this paper, we propose the method for creating semantics-aware malware retrieval system. In order to make the system have the semantic understanding attribute, we approximate the semantic space using the proposed loss function, multilabel centerloss. Our MR system was queried in three ways: malware samples, semantic components, a combination of malware samples and semantic components. The results of quantitative and qualitative evaluation showed that the proposed method made the system semantic-aware.
+%
+%뿐만아니라 멀웨어의 의미를 내포하지 못하는 싱글 레이블로 가르치면 공통 피쳐를 추출하기가 힘들어지기 때문에 성능이 좋지 못할 수 있다. 우리는 멀웨어가 갖고있는 악성 행위 및 속성들을 multi label로 supervise 해서 멀웨어의 의미를 잘 반영하는 MR 시스템을 만들었다. 
+%
+%
+%하지만 의미적 유사도를 계산하기 위해서 Feature 만으로는 부족하다. 
+%
+%우리는 멀웨어가 갖는 악성 행위와 및 속성들을 label로 지도함으로써 멀웨어 간의 의미적 관계를 학습할 수 있는 방법을 제안한다. 
+%
+%
+%머신러닝을 활용한 멀웨어 변종 탐지 방법에 대한 연구가 계속 되고 있다. 대부분 의미적 유사도를 잘 계산해 낼 수 있는 Feature 를 어떻게 engineering 할지 고민하는 연구들이다. 최근에는 딥러닝을 사용하여 더 하이러키컬한 feature 를 structural feature 로 부터 뽑아서 각종 멀웨어 태스크들을 수행하고 있지만 
+%
+%우리는  
+%
+%멀웨어 시밀러리티를 다 구조적으로만 계산 했다. 의미적 유사도는 계산 못했다. 우리는 이런이런 방법으로 유사도를 계싼할 수 있게 되었다. 
+%
+%넘쳐나는 변종에 대처하고 샘플 분석 시간을 단축시키기 위해 
+%공격자들이 변종을 통해 공격을 하면 엄청 효율적으로 공격이 가능해서 문제가 되는데 지금 나와있는 변종 대처 방법들은 구조가 비슷한 변종만 잡을 수 있지 의미가 비슷한 변종은 못잡는다. 이걸 하려면 의미가 비슷한 멀웨어 변종에 대처할 수 있는 방법이 필요하다. 
+%이런 문제에 대처하기 위해 
+%
+%
+%멀웨어에서 쉽게 추출한 Structural Feature로부터 semantic similarity 를 계산하기는 쉽지 않다. 어떻게 하면 멀웨어의 의미를 이해하는 Malware Information Retrieval System을 만들 수 있을까? 우리는 이를 가능하게 하기 위해 딥러닝을 활용하여 Semantic-aware representation vector 를 학습할 수 있는 목적함수인 Multilabel Center Loss(MCL)을 제안한다. malware 샘플의 의미는 그 멀웨어가 갖고있는 악성 행위들의 조합을 통해 표현될 수 있다. MCL로스릍 통해, 이런 속성을 갖고있는 Malware Semantic space에 malware representation vector들을 임베딩하였다. 그리고 이를 통해 학습된 벡터들로 구축된 Malware Information Retreival System이 멀웨어의 의미를 잘 이해하고 있다는 것을 정량, 정성 평가 결과를 통해 관측했다. 
+
+%우리는 malware 샘플의 의미(semantics)를 그 멀웨어가 갖고있는 악성 행위들의 조합을 통해 표현할 수 있다고 여겼다. MCL로스릍 통해 이런 속성을 반영할 수 있는 malware Semantic space에 representation vectors 를 임베딩하였다. 
+
+%In this paper, malware retrieval system using deep learning, and how to solve them. Multilabel Weighted Centerloss(MWC) is proposed to learn semantic distances between malware samples. Also we visualize the embedding vectors of malware samples and show the retrieval results to prove the synchronization between our perception of malwares and learned embedding space. \cite{medvinsky1993netcash}
+\end{abstract}
+
+% TODO: replace this section with code generated by the tool at https://dl.acm.org/ccs.cfm
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10002978</concept_id>
+<concept_desc>Security and privacy</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10002978.10002997.10002998</concept_id>
+<concept_desc>Security and privacy~Malware and its mitigation</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Security and privacy~Malware and its mitigation}
+% -- end of section to replace with generated code
+
+\keywords{Malware, Information Retrieval, Semantic Space, Deep Learning, Multilabel} % TODO: replace with your keywords
+
+\maketitle
+
+\input{ccs-body} % TODO: replace with your brilliant paper!
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{ccs-template}
+
+\end{document}

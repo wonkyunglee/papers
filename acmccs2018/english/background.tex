@@ -1,0 +1,47 @@
+\section{Background}
+
+% Handcrafted Feature Extract
+\subsection{Deep Learning }
+
+Neural networks are machine learning implementations that extract features based on statistical characteristics of training data. DNNs also provide hierarchical feature representations by configuring the network into several hidden layers. Generally, a DNN consists of an input layer, several hidden layers, and output layer. For a classification task, the input layer receives a feature vector representation of the target sample of the task as input. The output layer outputs the probability of a class related to a given input vector as a vector. This allows the DNN to predict the class per the input vector.
+ 
+The image classification task can improve the performance of the model by using the convolutional neural network (CNN)\cite{krizhevsky2012imagenet}, consisting of convolutional layers, pooling layers, and general neural network layers. For the convolutional layer, we extract features by applying a convolutional filter to the input. The pooling layer has the effect of down-sampling the features giving less effect.
+
+
+
+
+\subsection{Information Retrieval}
+Information retrieval was introduced in natural language processing as a task to find related documents from a string query. However, it has been extended to other domains and is now used in various fields (e.g., image\cite{datta2008image, yu2015learning}, music\cite{schedl2014music}, medical care\cite{goeuriot2016medical, mourao2015multimodal}, and malware\cite{santos2013noa}).
+
+\textbf{Boolean model.} A Boolean model is a classical information retrieval model. It is a search model that considers documents and user queries as set from the background of Boolean logic and set theory. Whereas its ease-of-implementation and intuitive use is advantageous, it is limited because the similarity is calculated discretely, and the retrieval result becomes very large or cannot be retrieved if it does not exactly match. Furthermore, all terms have the same weight\cite{lashkari2009boolean} .
+	
+
+
+\textbf{Vector space model.} Another method is the vector space model. This model represents documents and user queries in a vector space so that the distance between vectors can become similar. This requires a simple linear algebra model. It improves the retrieval result by giving different weights to the terms; it shows the similarity of the query as a continuous value. There are various models according to how to make the query of the document and the user into the vectors\cite{guo2016deep, liu2009learning} and how to measure the distance between the vectors\cite{diaz2016query, huang2013learning, roy2016using, mitra2016dual}.
+
+
+\textbf{Learn vector representations using deep learning.} As mentioned, using deep learning to perform machine learning tasks results in better generalization. This is because it learns via a hierarchical representation. Therefore, the combination of various tasks using the vector space model and deep learning results in performance breakthroughs for many tasks\cite{krizhevsky2012imagenet, mikolov2013efficient, hinton2012deep}. Additionally, the IR field using the vector space model also achieves a breakthrough with deep learning\cite{huang2013learning, severyn2015learning, wan2014deep}.
+
+
+There are supervised and unsupervised methods for learning vector representations. A typical unsupervised learning method uses an autoencoder. Attempts have been made to encode malware using the autoencoder. Supervised learning occurs when a person provides an answer label, and a classification or regression model performs the task of matching the label. The output of the bottleneck layer obtained from the learning process as a representation vector of the corresponding sample contains the most compressed information. This allows some control over the position of the vector representation. For example, one can use the objective function for metric learning to determine which samples to locate near and which samples to locate far. This allows one-shot or few-shot learning tasks, improving the performance of information retrieval and determining rankings based on the distance between vectors and respond to fewer samples.
+
+
+
+\subsection{Metric Learning}
+Metric learning is a technique for learning distance functions. More specifically, through metric learning, one can train a distance function to determine which samples will be close to each other, which samples will be farther, or, to some extent, how far the distance will be.
+
+A typical example of metric learning using deep learning is the Siamese network. The Siamese network receives pairs of samples as input data, teaching that the distance difference of the feature vector is 0 if the pairs are the same label, and that the distance difference is 1 or more if the labels are different.
+
+Another example is centerloss\cite{wen2016discriminative}. This creates a template vector for each class in the single label classification task and adds constraints to the existing cross-entropy loss so that the representation vectors of the samples belonging to the same class become the same as the template vector of the corresponding class. This reduces the intra-class variance so that representation vectors can be used for tasks like information retrieval.
+
+The distance function learned by metric learning is used in many real-word tasks to find similar data, such as face recognition, image retrieval, and text retrieval\cite{sun2014deep, huang2013learning, wan2014deep}.
+
+
+
+
+\subsection{Semantic Spaces for Natural Language}
+
+The purpose of creating semantic spaces is to represent a natural language that captures meaning in the natural language domain. The original motivation of semantic spaces was to address two challenges in the natural language domain. The first is to make words with similar syntactics but different meanings to different representations, and the other is to make words with the same meaning but the different syntactics to the same representation.
+
+Recently, neural networks have made major advances in combination with other new approaches (e.g., word2vec\cite{mikolov2013efficient},  glove\cite{pennington2014glove} and fastText\cite{joulin2016fasttext}). If we can express the natural language well in semantic spaces, we can use it for various tasks, such as document classification, document search, question and answering, speech recognition, and translation.
+
