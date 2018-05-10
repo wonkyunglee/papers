@@ -9,14 +9,14 @@ In this section, we evaluate the performance of our MR system in several ways, a
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
 Dataset             & \multicolumn{6}{c|}{Querying trainset}                      & \multicolumn{6}{c|}{Querying validset}                      \\ \hline
-Metric              & \multicolumn{3}{c|}{precision}  & \multicolumn{3}{c|}{weighted precision} & \multicolumn{3}{c|}{precision}  & \multicolumn{3}{c|}{weighted precision} \\ \hline
+Metric              & \multicolumn{3}{c|}{Precision}  & \multicolumn{3}{c|}{Weighted precision} & \multicolumn{3}{c|}{Precision}  & \multicolumn{3}{c|}{Weighted precision} \\ \hline
 k              & top1   & top10  & top100 & top1      & top10     & top100   & top1   & top10  & top100 & top1      & top10     & top100   \\ \hline
-weighted center(sum)  & 0.9846 & 0.9743 & 0.9374 & 0.9869    & \textbf{0.9802}   & \textbf{0.955}    & 0.8717 & 0.862  & 0.8272 & 0.8808    & 0.8746    & 0.8534   \\ \hline
-weighted center(avg) & \textbf{0.9856} & 0.9772 & \textbf{0.9481} & 0.9855    & 0.9779    & 0.9528   & \textbf{0.8929 }& \textbf{0.8837 }& 0.8559 & \textbf{0.8893   } & 0.8815    & 0.8591   \\ \hline
-center(sum)         & 0.9843 & 0.9737 & 0.9358 & 0.984     & 0.9733    & 0.9388   & 0.8736 & 0.8676 & 0.8373 & 0.8752    & 0.872     & 0.8462   \\ \hline
-center(avg)        & 0.987  & \textbf{0.9776} & 0.9474 & 0.9872    & \textbf{0.9776}    & 0.9472   & 0.8845 & 0.8779 & \textbf{0.8562} & 0.8892    & \textbf{0.8829}    & \textbf{0.8631}   \\ \hline
-multilabel(baseline2)               & 0.9764 & 0.9617 & 0.9115 & 0.9752    & 0.9593    & 0.9094   & 0.8871 & 0.8713 & 0.8184 & 0.8869    & 0.8704    & 0.8236   \\ \hline
-singlelabel(baseline1)              & 0.9035 & 0.8727 & 0.8061 & 0.9004    & 0.8667    & 0.7946   & 0.8489 & 0.8231 & 0.7446 & 0.8434    & 0.8151    & 0.733    \\ \hline
+Weighted centerloss (sum)  & 0.9846 & 0.9743 & 0.9374 & 0.9869    & \textbf{0.9802}   & \textbf{0.955}    & 0.8717 & 0.862  & 0.8272 & 0.8808    & 0.8746    & 0.8534   \\ \hline
+Weighted centerloss (avg) & \textbf{0.9856} & 0.9772 & \textbf{0.9481} & 0.9855    & 0.9779    & 0.9528   & \textbf{0.8929 }& \textbf{0.8837 }& 0.8559 & \textbf{0.8893   } & 0.8815    & 0.8591   \\ \hline
+Centerloss (sum)         & 0.9843 & 0.9737 & 0.9358 & 0.984     & 0.9733    & 0.9388   & 0.8736 & 0.8676 & 0.8373 & 0.8752    & 0.872     & 0.8462   \\ \hline
+Centerloss (avg)        & 0.987  & \textbf{0.9776} & 0.9474 & 0.9872    & \textbf{0.9776}    & 0.9472   & 0.8845 & 0.8779 & \textbf{0.8562} & 0.8892    & \textbf{0.8829}    & \textbf{0.8631}   \\ \hline
+Multi-label (baseline2)               & 0.9764 & 0.9617 & 0.9115 & 0.9752    & 0.9593    & 0.9094   & 0.8871 & 0.8713 & 0.8184 & 0.8869    & 0.8704    & 0.8236   \\ \hline
+Single-label (baseline1)              & 0.9035 & 0.8727 & 0.8061 & 0.9004    & 0.8667    & 0.7946   & 0.8489 & 0.8231 & 0.7446 & 0.8434    & 0.8151    & 0.733    \\ \hline
 \end{tabular}
 \end{center}
 \bigskip\centering
@@ -34,21 +34,18 @@ singlelabel(baseline1)              & 0.9035 & 0.8727 & 0.8061 & 0.9004    & 0.8
 Dataset             & \multicolumn{6}{c|}{Queyring trainset}                      & \multicolumn{6}{c|}{Queyring validset}                      \\ \hline
 Metric              & \multicolumn{3}{c|}{precision}  & \multicolumn{3}{c|}{weighted precision} & \multicolumn{3}{c|}{precision}  & \multicolumn{3}{c|}{weighted precision} \\ \hline
 k              & top1   & top10  & top100 & top1      & top10     & top100   & top1   & top10  & top100 & top1      & top10     & top100   \\ \hline
-weighted center(sum)  & 1      & 1      & 0.9487 & 1         & 1         & 0.9329   & 0.9082 & 0.9075 & 0.8875 & 0.8816    & 0.881     & 0.8547   \\ \hline
-weighted center(avg) & 1      & 1      & \textbf{0.9613} & 1         & 1         & \textbf{0.9671}   & \textbf{0.9203} & \textbf{0.9186} & \textbf{0.9029 }& \textbf{0.9142}    &\textbf{ 0.9085}    & \textbf{0.8916}   \\ \hline
-center(sum)         & 1      & 1      & 0.9483 & 1         & 1         & 0.9319   & 0.9058 & 0.9058 & 0.8839 & 0.8845    & 0.8845    & 0.8487   \\ \hline
-center(avg)        & 1      & 1      & 0.9544 & 1         & 1         & 0.965    & 0.9179 & 0.9179 & 0.8999 & 0.9048    & 0.9048    & 0.888    \\ \hline
-multilabel(baseline2)               & 0.9877 & 0.9665 & 0.7949 & 0.9877    & 0.9668    & 0.7793   & 0.8913 & 0.8894 & 0.8033 & 0.8666    & 0.8676    & 0.7692   \\ \hline
-singlelabel(baseline1)              & 0.9647 & 0.9004 & 0.7397 & 0.9608    & 0.8961    & 0.7235   & 0.8865 & 0.8597 & 0.7805 & 0.8784    & 0.8413    & 0.7501   \\ \hline
+Weighted centerloss (sum)  & 1      & 1      & 0.9487 & 1         & 1         & 0.9329   & 0.9082 & 0.9075 & 0.8875 & 0.8816    & 0.881     & 0.8547   \\ \hline
+Weighted centerloss (avg) & 1      & 1      & \textbf{0.9613} & 1         & 1         & \textbf{0.9671}   & \textbf{0.9203} & \textbf{0.9186} & \textbf{0.9029 }& \textbf{0.9142}    &\textbf{ 0.9085}    & \textbf{0.8916}   \\ \hline
+Centerloss (sum)         & 1      & 1      & 0.9483 & 1         & 1         & 0.9319   & 0.9058 & 0.9058 & 0.8839 & 0.8845    & 0.8845    & 0.8487   \\ \hline
+Centerloss (avg)        & 1      & 1      & 0.9544 & 1         & 1         & 0.965    & 0.9179 & 0.9179 & 0.8999 & 0.9048    & 0.9048    & 0.888    \\ \hline
+Multi-label (baseline2)               & 0.9877 & 0.9665 & 0.7949 & 0.9877    & 0.9668    & 0.7793   & 0.8913 & 0.8894 & 0.8033 & 0.8666    & 0.8676    & 0.7692   \\ \hline
+Single-label (baseline1)              & 0.9647 & 0.9004 & 0.7397 & 0.9608    & 0.8961    & 0.7235   & 0.8865 & 0.8597 & 0.7805 & 0.8784    & 0.8413    & 0.7501   \\ \hline
 \end{tabular}
 \end{center}
 \bigskip\centering
 
 \end{minipage}
 \end{table*}%
-
-
-
 
 
 \subsection{Implementation and Setup}
@@ -62,8 +59,14 @@ The dataset used for learning and evaluation of the model is composed of samples
 	}
 \end{itemize}
 
-\textbf{Hyperparameters. }
-The hyper parameters used in the experiment are as follows. Adam optimizer\cite{kingma2014adam} was used as the optimizer and the learning rate was 0.001. $\alpha$ in centerloss is 0.1. When learning the PE1300 dataset, we used 0.1 as $\lambda$, which is the ratio of cross-entropy loss and centerloss, and 0.001, when learning APK19000. The structure of the neural network is the five layers of CNN and two Fully Connected layers using batch normalization\cite{ioffe2015batch}. The previous layer of the last layer used leaky relu\cite{xu2015empirical} as activation function and the rest of the activation function are relu\cite{nair2010rectified}. 
+\textbf{Settings. }
+
+The feature extracter module extracts the malware image feature \cite{nataraj2011malware} and resize it to 224 by 224.
+The network structure of the neural embedder module is convolutional neural netowrk which has five convolutional layers and two fully connected layers using batch normalization \cite{ioffe2015batch}. The previous layer of the last layer used leaky relu\cite{xu2015empirical} as activation function and the rest of the activation function are relu \cite{nair2010rectified}. 
+The malware image \cite{nataraj2011malware} is passed through neural embedder. The convolutional layers extract features to contain local shift invariant characteristics of the malignant region or the region that characterizes the malware.
+
+The hyper parameters used in the experiment are as follows. Adam optimizer\cite{kingma2014adam} was used as the optimizer and the learning rate was 0.001. $\alpha$ in centerloss is 0.1. When learning the PE1300 dataset, we used 0.1 as $\lambda$, which is the ratio of cross-entropy loss and centerloss, and 0.001, when learning APK19000. 
+
 
 \textbf{Models. }
 There are six models used in the experiment. First, the single-label model is a first baseline of our experiments, in which the auxiliary task classifies representative label using softmax-cross-entropy as a loss function. The multi-label model is a deep learning model designed to classify multiple labels into multi-task learning using a sigmoid cross-entropy as a loss function. This is a second baseline of our experiment. Next, to find out the effect of applying centerloss, we added centerloss to the multi-label model. There are two models that combine semantic components as average and summation. And to see the effect of scoring, here is the weighted center loss model with the importance coefficient added as a constraint. This method also has two versions of average and summation models.
@@ -77,13 +80,13 @@ There are six models used in the experiment. First, the single-label model is a 
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
 Dataset             & \multicolumn{3}{c|}{APK19000}                               & \multicolumn{3}{c|}{PE1300}                                             \\ \hline
-Variance              & intraclass  & interclass  & inter/intra & intraclass  & interclass  & inter/intra  \\ \hline
-weighted center(sum)  & 0.0473              &         2.793       &     59.0486             & 0.129               &              2.169 &              16.8140    \\ \hline
-weighted center(avg) & \textbf{0.0101}              &          \textbf{    1.1906} &    \textbf{117.8812 }            & \textbf{0.0361             } &                   \textbf{ 1.2698} &      \textbf{35.1745}                   \\ \hline
-center(sum)         & 0.2268              &                    5.2967 &          23.3541               & 0.1748              &              1.8299       &    10.4685                     \\ \hline
-center(mean)        & 0.0258              &                    1.2785 &           49.5543              & 0.1332              &        1.6826             &     12.6321                    \\ \hline
-multilabel(baseline2)               & 2.4956              &                    21.8435 &       8.7528                    & 25833.582           &        840.54             &        0.0325               \\ \hline
-singlelabel(baseline1)              & 1.2103              &                    15.18 &            12.5423             & 2310.7649           &      267.683               &           0.1158              \\ \hline
+Variance              & Intra-class  & Inter-class  & Inter/Intra & Intra-class  & Inter-class  & Inter/Intra  \\ \hline
+Weighted centerloss (sum)  & 0.0473              &         2.793       &     59.0486             & 0.129               &              2.169 &              16.8140    \\ \hline
+Weighted centerloss (avg) & \textbf{0.0101}              &          \textbf{    1.1906} &    \textbf{117.8812 }            & \textbf{0.0361             } &                   \textbf{ 1.2698} &      \textbf{35.1745}                   \\ \hline
+Centerloss (sum)         & 0.2268              &                    5.2967 &          23.3541               & 0.1748              &              1.8299       &    10.4685                     \\ \hline
+Centerloss (mean)        & 0.0258              &                    1.2785 &           49.5543              & 0.1332              &        1.6826             &     12.6321                    \\ \hline
+Multi-label (baseline2)               & 2.4956              &                    21.8435 &       8.7528                    & 25833.582           &        840.54             &        0.0325               \\ \hline
+Single-label (baseline1)              & 1.2103              &                    15.18 &            12.5423             & 2310.7649           &      267.683               &           0.1158              \\ \hline
 \end{tabular}
 \end{center}
 \bigskip\centering
@@ -99,12 +102,12 @@ singlelabel(baseline1)              & 1.2103              &                    1
 \begin{tabular}{|c|c|c|}
 \hline
 Dataset             & APK19000 & PE1300 \\ \hline
-weighted center(sum)  & 0.9618   & 0.9801 \\ \hline
-weighted center(avg) & 0.9636   & \textbf{0.9812} \\ \hline
-center(sum)         & \textbf{0.9728 }  & 0.9753 \\ \hline
-center(avg)        & 0.9705   & 0.9574 \\ \hline
-multilabel(baseline2)          & 0.9606   & 0.9495 \\ \hline
-singlelabel(baseline1)              & 0.9508   & 0.946  \\ \hline
+Weighted center (sum)  & 0.9618   & 0.9801 \\ \hline
+Weighted center (avg) & 0.9636   & \textbf{0.9812} \\ \hline
+Centerloss (sum)         & \textbf{0.9728 }  & 0.9753 \\ \hline
+Centerloss (avg)        & 0.9705   & 0.9574 \\ \hline
+Multi-label(baseline2)          & 0.9606   & 0.9495 \\ \hline
+Single-label(baseline1)              & 0.9508   & 0.946  \\ \hline
 \end{tabular}
 \end{center}
 \bigskip\centering
@@ -120,7 +123,8 @@ In this part, we will analyze the effect of centerloss by comparing precision at
 
 \begin{itemize}
 	\item{ \textbf{Precision} 
-	Let the labels of the querying sample $q$ be $y_{q1}, y_{q2}, ... y_{q_m}$. Let the labels of the $k$ search result samples $r_1, r_2, ..., r_k$ obtained from Ranking module $R$ be $y_{r1}, y_{r2}, ..., y_{r_l}$ respectively . In this case, precision at top K is obtained as follows.
+	
+	Let the labels of the querying sample $q$ be $y_{q_1}, y_{q_2}, ..., y_{q_m}$. Let the labels of the $k$ search result samples $r_1, r_2, ..., r_k$ obtained from Ranking module $R$ be $y_{r_1}, y_{r_2}, ..., y_{r_l}$ respectively . In this case, precision at top K is obtained as follows.
 
 	\[
 	Precision_{K} = \frac{1}{N} *\sum_{i=1}^{N}{ \frac{ \sum_{k=1}^{K}{|Y_{q_i} \cap Y_{r_k}|}}{  \sum_{k=1}^{K}{ |Y_{r_k}| }  }}
@@ -168,7 +172,7 @@ Table.\ref{tab:auxiliary_result} represents the AUC for the validation set of th
 In this part, we list the top k results obtained by querying the MR system we built in the three ways introduced in Section 4.1. Thus, our proposal shows that the performance of the MR system has improved. For each querying test, we can see the querying method in the Figure. \ref{fig:qualitative_all}.
 
 \textbf{Querying by malware sample. }
-A sample of the APK malware with a semantic component consisting of ``agent’’, ``slocker’’, ``jisut’’, and ``ransom’’ was queried to the learned MR system with the models described above. The retrieval result can be observed in Table. \ref{tab:sample_query_result}. The system learned by the centerloss (add) model is better than the other two models.
+A sample of the APK malware with a semantic component consisting of \texttt{agent}, \texttt{slocker}, \texttt{jisut}, and \texttt{ransom} was queried to the learned MR system with the models described above. The retrieval result can be observed in Table.\ref{tab:sample_query_result}. The system learned by the centerloss (add) model is better than the other two models.
 \[
    query = \mathbf{e_q} 
 \]
@@ -182,7 +186,7 @@ A sample of the APK malware with a semantic component consisting of ``agent’�
 \begin{center}
 \begin{tabular}{@{}lllll@{}}
 \toprule
-\multicolumn{1}{c}{Semantics of queried sample}   & top & \multicolumn{1}{c}{center(sum)} & \multicolumn{1}{c}{multi}     & \multicolumn{1}{c}{single}             \\ \midrule
+\multicolumn{1}{c}{Semantics of queried sample}   & Top & \multicolumn{1}{c}{Centerloss (sum)} & \multicolumn{1}{c}{Multi-label}     & \multicolumn{1}{c}{Single-label}             \\ \midrule
 \multicolumn{1}{c}{agent, slocker, jisut, ransom} & 1   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
                                                   & 2   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
                                                   & 3   & agent, slocker, jisut, ransom  & agent, slocker, jisut, ransom & slocker, jisut, ransom                 \\
@@ -200,11 +204,11 @@ A sample of the APK malware with a semantic component consisting of ``agent’�
 \end{table*}%
 
 \textbf{Querying by semantic components. }
-The next test is to querying the semantic components and retrieve samples. We tested the APK MR system learned by the centerloss (add) model. We used the sum of the semantic component vectors corresponding to ``agent’’, ``ewind’’, and ``downloader’’ as a query.
+The next test is to querying the semantic components and retrieve samples. We tested the APK MR system learned by the centerloss (add) model. We used the sum of the semantic component vectors corresponding to \text{agent}, \text{ewind}, and \text{downloader} as a query.
 \[
    query = \mathbf{s}_{\text{agent}} + \mathbf{s}_{\text{ewind}} + \mathbf{s}_{\text{downloader}}  
 \]
-Results can be found in Table. \ref{tab:semantics_query_result}. In our learning data set, there are 89 samples consisting of ``agent’’, ``ewind’’, and ``downloader’’. We could see that these samples were all searched in the samples up to the top 90.
+Results can be found in Table.\ref{tab:semantics_query_result}. In our learning data set, there are 89 samples consisting of \text{agent}, \texttt{ewind}, and \texttt{downloader}. We could see that these samples were all searched in the samples up to the top 90.
 
 % Table
 \begin{table*}%semantics_query_result
@@ -214,7 +218,7 @@ Results can be found in Table. \ref{tab:semantics_query_result}. In our learning
 \begin{center}
 \begin{tabular}{@{}lcl@{}}
 \toprule
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Queried semantic \\ components\end{tabular}} & top        & \multicolumn{1}{c}{centerloss(sum)} \\ \midrule
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Queried semantic components\end{tabular}} & Top        & \multicolumn{1}{c}{Centerloss (sum)} \\ \midrule
 \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}agent, ewind,  downloader\end{tabular}}    & 1$\sim$86  & agent, ewind, downloader            \\
                                                                                            & 87         & agent, ewind, downloader, ransom    \\
                                                                                            & 88$\sim$90 & agent, ewind, downloader            \\
@@ -230,11 +234,11 @@ Results can be found in Table. \ref{tab:semantics_query_result}. In our learning
 
 
 \textbf{Querying by the combination of semantics and sample. }
-Finally, we tested to add or subtract some semantic components to the malware samples for querying. As in the previous two experiments, we tested for APK. The APK samples used in the experiment have four semantic components: ``smsreg’’, ``agent’’, ``smspay’’, ``smssend’’. Among these samples, the ``smssend’’ component was omitted and the ``dropper’’ component was added to create the query statement.
+Finally, we tested to add or subtract some semantic components to the malware samples for querying. As in the previous two experiments, we tested for APK. The APK samples used in the experiment have four semantic components: \texttt{smsreg}, \texttt{agent}, \texttt{smspay}, \texttt{smssend}. Among these samples, the \texttt{smssend} component was omitted and the \texttt{dropper} component was added to create the query statement.
 \[
    query = \mathbf{e_q} - \mathbf{s}_{\text{smssend}} + \mathbf{s}_{\text{dropper}} 
 \]
-In our learning data set, there are 56 samples consisting of four semantic components of ``smsreg’’, ``agent’’, ``smspay’’, and ``dropper’’, and all the samples are found in top 69 results.
+In our learning data set, there are 56 samples consisting of four semantic components of \texttt{smsreg}, \texttt{agent}, \texttt{smspay}, and \texttt{dropper}, and all the samples are found in top 69 results.
 
 
 % Table
@@ -245,7 +249,7 @@ In our learning data set, there are 56 samples consisting of four semantic compo
 \begin{center}
 \begin{tabular}{llcl}
 \hline
-\multicolumn{2}{c}{Query}                                                                    & \multirow{2}{*}{top} & \multicolumn{1}{c}{\multirow{2}{*}{centerloss(sum)}} \\
+\multicolumn{2}{c}{Query}                                                                    & \multirow{2}{*}{Top} & \multicolumn{1}{c}{\multirow{2}{*}{Centerloss (sum)}} \\
 \multicolumn{1}{c}{Sample}                         & \multicolumn{1}{c}{Semantic components} &                      & \multicolumn{1}{c}{}                                 \\ \hline
 \multicolumn{1}{c}{smsreg, agent, smspay, smssend} & - smssend + dropper                     & 1$\sim$34            & smsreg, dropper, agent, smspay                       \\
                                                    &                                         & 35                   & smsreg, dropper, smspay                              \\
