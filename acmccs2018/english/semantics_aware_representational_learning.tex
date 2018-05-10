@@ -14,7 +14,7 @@ This section describes how the vectore space in which malware is embedded approx
 
 \subsection{Semantic Space for Malwares}
 
-\textbf{The meaning of approximate semantic space of malwares}
+\textbf{The meaning of approximate semantic space of malwares. }
 We now take an example of language, thinking of the meaning of certain words. We consider the relationship of those meanings. We can assume that city names and words related to machine learning are located far away from each other. We can also imagine that the words will be near. The similarity of the relationships between words can thus be considered. The relationship between \texttt{King} and \texttt{Queen} is similar to the relationship between \texttt{Man} and \texttt{Woman}. To describe the meanings of these words, we represent them as vectors on a vector space. If the meaning is similar, the distance between the vectors is near. If the meaning is disparate, the distance between the vectors is far away. We also approximate the semantic relationship between words by using operations defined in the vector space, such as \texttt{king - queen = man - woman}.
 
 Similarly, we can imagine the semantic meaning of malicious code. We consider malware as a combination of malicious components. We use the concept of basis and linear combination to describe it as a vector space operation. In other words, we can approximate the semantic space by training the semantic vector of malware to be represented as a linear combination of the semantic component vector.
@@ -23,13 +23,13 @@ Similarly, we can imagine the semantic meaning of malicious code. We consider ma
 \textbf{Approximated semantic space. }
 Let $X = \{x_1, …, x_n, …, x_N\}$ be a set of malwares.
 Let $S$ be a subset of vector space $V$ of dimension $d$ and let semantic component set $S = \{s_1, ... , s_k, … s_K\}$ be a linearly independent subset of $V$.  
-Then for every $\mathbf{e} \in E$, there is an unique linear combination of the sementic component vectors that equals $e$.
+Then for every $\mathbf{e} \in E$, there is a linear combination of the sementic component vectors that equals $e$.
 \[
 \mathbf{e} = c_1\mathbf{s_1} + c_2\mathbf{s_2} + … + c_k\mathbf{s_k} 
 \]
 
 where $c_i$ is the i-th element of coefficient vector $ \mathbf{c} = \{c_1, ... , c_k\}$ and we call it as importance coefficents.
-We call a vector $\mathbf{e}$ as a semantic vector of malware $x$ and there is a nonlinear mapping from $X$ to $E$. 
+We call vector $\mathbf{e}$ as a semantic vector of malware $x$ and there is a nonlinear mapping from $X$ to $E$. 
 
 \textbf{Metric function. }
 We use an Euclidean Distance $d(\mathbf{e_i}, \mathbf{e_j})$ for a metric of a set E and it means the function that defines a distance between  semantics of two malwares. 
@@ -42,11 +42,11 @@ If we approximate the semantic space well, then the following querying tasks sho
 \subsection{Solution Overview}
 \begin{figure*}[!htb] % qualitative_all
   \includegraphics[width=\textwidth]{../../figures/qualitative_all_fix2.pdf}
-  \caption{Our malware retrieval system was queried in three ways: malware samples(a), semantic components(b) and a combination of malware samples and semantic components(c).}
+  \caption{Our malware retrieval system was queried in three ways: malware samples (a), semantic components (b) and a combination of malware samples and semantic components (c).}
   \label{fig:qualitative_all}
 \end{figure*}
 
-\textbf{Multilabel classification. }
+\textbf{Multi-label classification. }
 To train the vector representation, $E$, that reflects the meaning of the malware sample, multi-label classification learning was selected as the auxiliary task. To train this classification task, the neural embedder, $h$, places the representation vectors so that they can be classified by the linear classifier. Most studies that train malware classifiers learn classifiers to classify malware under single label.
 
 However, if you identify a label in a malware domain and create a malware IR system based on it, then the trained embedding vector is insufficient to include the meaning of the sample. Typically, the process of labeling malware is irrational in expressing the meaning of malware. Malware often displays multiple malicious behaviors at the same time. However, existing malware labeling systems do not reflect these attributes. Additionally, naming rules are often globally inconsistent, and even locally, analysts name via differing criteria. Regarding non-prevalent malware, when one labels malware, a name is provided unrelated to the malware’s behavior. These labeling processes prevent the machine learning model from learning the appropriate meanings. 
@@ -63,7 +63,7 @@ Second, we can locate representation vectors to approximate the semantic space. 
 %그리고, 보틀넥과 시멘틱 컴포넌트들의 합의 차이에 alpha/the number of answer labels 만큼의 곱을 하여 각 레이블을 업데이트해준다. 알파는 하이퍼파라미터로, 템플릿 벡터와 보틀넥을 얼마나 섞어서 기존 템플릿벡터를 업데이트할지를 결정해주는 값이다. 
 
 \textbf{Learn to rank. }
-In malware labels, there are important labels and those that are not. Considering this importance in creating a MR system is one of the important factors to satisfy the semantic understanding property. For example, in PE format labels, ranking more than labels such as ransom and coinminer rather than agent or downloader would be considered as a semantics-aware search system. To solve this problem, we use weighted centerloss which reflects the importance of labels with constraint. The constraint determines the norm of the semantic components. Euclidean distance, the metric function that we use in retrieval, is affected by the norm of the two vectors when computing distances. The distance between semantic component vector, having a large norm and another component vector is likely to be larger than the distance between component vectors having a small norm. Therefore, in the MR system ranking with Euclidean distance, when malware having a semantic component with a high importance is queried, the malware samples, including the semantic component, are more likely to be searched. This can be regarded as a scoring technique (i.e., tf-idf\cite{baeza1999modern}), making it possible to search documents with specific properties more easily in the existing information retrieval system.
+In malware labels, there are important labels and those that are not. Considering this importance in creating a MR system is one of the important factors to satisfy the semantic understanding property. For example, in PE format labels, ranking more than labels such as ransom and coinminer rather than agent or downloader would be considered as a semantics-aware search system. To solve this problem, we use weighted centerloss which reflects the importance of labels with constraint. The constraint determines the norm of the semantic components. Euclidean distance, the metric function that we use in retrieval, is affected by the norm of the two vectors when computing distances. The distance between semantic component vector, having a large norm and another component vector is likely to be larger than the distance between component vectors having a small norm. Therefore, in the MR system ranking with Euclidean distance, when malware having a semantic component with a high importance is queried, the malware samples, including the semantic component, are more likely to be searched. This can be regarded as a scoring technique (i.e., tf-idf \cite{baeza1999modern}), making it possible to search documents with specific properties more easily in the existing information retrieval system.
  
 
 \subsection{Proposed Objective Functions}
@@ -88,7 +88,7 @@ h(v_i;\theta) - \mathbf{s}_\text{target} < \epsilon ,
 %\]
 for $i \in \{1,2, ..., N\}$ where $\epsilon \geq 0$ and $s_\text{target}$ is a target semantic vetcor.
 
-To find the parameters satisfying the above equation, the final loss function was constructed by adding cross-entropy loss and multilabel centerloss at a ratio of 1:$\lambda$ \cite{wen2016discriminative}. We can formulate the loss function we propose as Eq.\ref{eqn:centerloss}. 
+To find the parameters satisfying the above equation, the final loss function was constructed by adding cross-entropy loss and multi-label centerloss at a ratio of 1:$\lambda$ \cite{wen2016discriminative}. We can formulate the loss function we propose as Eq.\ref{eqn:centerloss}. 
 
 \begin{equation}
 \label{eqn:centerloss}
@@ -114,7 +114,7 @@ As described above, we apply importance coefficients for each semantic component
 ||\mathbf{s_i}|| = c_i \text{ for all i }\in \{i = 1,2, ..., M\}
 \]
 
-The cross-entropy loss updates the parameters of $ \theta, W, \mathbf{b} $ to improve the accuracy of multilabel classification. Multi-label centerloss updates parameters as follows. First, the parameters of $\theta, W, \mathbf{b} $ are updated so that the embedding vector is close to $\mathbf{s}_{\text{target}} $ via back propagation. Second, the semantic components are updated so that $ \mathbf{s}_{\text{target}} $ is close to the embedding vector. When updating, we divide difference vector between $\mathbf{s}_{\text{target}}$ of current step and embedding vector equally and we add it to each semantic component vectors, such that $\mathbf{s}_{\text{target}}$ of next step to be locate at Internally dividing point of current $\mathbf{s}_{\text{target}}$ and embedding vector of sample. 
+The cross-entropy loss updates the parameters of $ \theta, W, \mathbf{b} $ to improve the accuracy of multi-label classification. Multi-label centerloss updates parameters as follows. First, the parameters of $\theta, W, \mathbf{b} $ are updated so that the embedding vector is close to $\mathbf{s}_{\text{target}} $ via back propagation. Second, the semantic components are updated so that $ \mathbf{s}_{\text{target}} $ is close to the representation vector. When updating, we divide difference vector between $\mathbf{s}_{\text{target}}$ of current step and representation vector equally and we add it to each semantic component vectors, such that $\mathbf{s}_{\text{target}}$ of next step to be locate at Internally dividing point of current $\mathbf{s}_{\text{target}}$ and representation vector of sample. 
 
 There are several methods to combine semantic component vectors, we propose summation model and average model. The performance of each model can be found in Section 5.
 
@@ -124,7 +124,7 @@ The process of parameters and semantic component update can be found in Figure.\
 
 \begin{figure}[!htb] % update
   \includegraphics[width=\columnwidth]{../../figures/update.pdf}
-  \caption{The semantic components are updated so that $ \mathbf{s}_{\text{target}} $ is close to the embedding vector. When updating, we divide difference vector between $\mathbf{s}_{\text{target}}$ of current step and embedding vector equally and we add it to each semantic component vectors, such that $\mathbf{s}_{\text{target}}$ of next step to be locate at Internally dividing point of current $\mathbf{s}_{\text{target}}$ and embedding vector of sample. 
+  \caption{The semantic components are updated so that $ \mathbf{s}_{\text{target}} $ is close to the representation vector. When updating, we divide difference vector between $\mathbf{s}_{\text{target}}$ of current step and representation vector equally and we add it to each semantic component vectors. Thus $\mathbf{s}_{\text{target}}$ of next step is located at internally dividing point of current $\mathbf{s}_{\text{target}}$ and representation vector of sample. 
 }
   \label{fig:update}
 \end{figure}
@@ -156,22 +156,22 @@ The process of parameters and semantic component update can be found in Figure.\
   	
     
 	\If{Summation Model}
-	{$s_{\text{target}} \leftarrow \sum_i^M{s_i}$}
+	{$\mathbf{s}_{\text{target}} \leftarrow \sum_i^M{s_i}$}
 	\ElseIf{Average Model}
-	{$s_{\text{target}} \leftarrow \frac{1}{M}\sum_i^M{s_i}$}    
+	{$\mathbf{s}_{\text{target}} \leftarrow \frac{1}{M}\sum_i^M{s_i}$}    
     
     \KwRet $s_{\text{target}}$\;
   }
   \;
     
   \SetKwProg{Pn}{Function}{:}{}
-  \Pn{\Fnew{$\mathbf{s}$, $s_{\text{target}}$, $\mathbf{e}$, $\alpha$, $\mathbf{c}$}}{
+  \Pn{\Fnew{$\mathbf{s}$, $\mathbf{s}_{\text{target}}$, $\mathbf{e}$, $\alpha$, $\mathbf{c}$}}{
     $M \leftarrow $ The number of semantic components \\
     \ForEach{$i \in \{1, 2, ..., K\}$}{
 	  \If{Summation Model}
-	  {$\mathbf{s}_i \leftarrow \mathbf{s}_i - \frac{\alpha}{M}(s_{\text{target}} - e)$}
+	  {$\mathbf{s}_i \leftarrow \mathbf{s}_i - \frac{\alpha}{M}(\mathbf{s}_{\text{target}} - \mathbf{e})$}
 	  \ElseIf{Average Model}
-	  {$\mathbf{s}_i \leftarrow \mathbf{s}_i - \alpha (s_{\text{target}} - e)$ }
+	  {$\mathbf{s}_i \leftarrow \mathbf{s}_i - \alpha (\mathbf{s}_{\text{target}} - \mathbf{e})$ }
 	  \If{Weighted Model}
 	  {$\mathbf{s}_i \leftarrow \frac{\mathbf{s}_i}{||\mathbf{s}_i||} c_i$}    
     }

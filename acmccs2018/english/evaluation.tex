@@ -32,7 +32,7 @@ Single-label (baseline1)              & 0.9035 & 0.8727 & 0.8061 & 0.9004    & 0
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
 Dataset             & \multicolumn{6}{c|}{Queyring trainset}                      & \multicolumn{6}{c|}{Queyring validset}                      \\ \hline
-Metric              & \multicolumn{3}{c|}{precision}  & \multicolumn{3}{c|}{weighted precision} & \multicolumn{3}{c|}{precision}  & \multicolumn{3}{c|}{weighted precision} \\ \hline
+Metric              & \multicolumn{3}{c|}{Precision}  & \multicolumn{3}{c|}{Weighted precision} & \multicolumn{3}{c|}{Precision}  & \multicolumn{3}{c|}{Weighted precision} \\ \hline
 k              & top1   & top10  & top100 & top1      & top10     & top100   & top1   & top10  & top100 & top1      & top10     & top100   \\ \hline
 Weighted centerloss (sum)  & 1      & 1      & 0.9487 & 1         & 1         & 0.9329   & 0.9082 & 0.9075 & 0.8875 & 0.8816    & 0.881     & 0.8547   \\ \hline
 Weighted centerloss (avg) & 1      & 1      & \textbf{0.9613} & 1         & 1         & \textbf{0.9671}   & \textbf{0.9203} & \textbf{0.9186} & \textbf{0.9029 }& \textbf{0.9142}    &\textbf{ 0.9085}    & \textbf{0.8916}   \\ \hline
@@ -50,22 +50,24 @@ Single-label (baseline1)              & 0.9647 & 0.9004 & 0.7397 & 0.9608    & 0
 
 \subsection{Implementation and Setup}
 \textbf{Datasets. } 
-The dataset used for learning and evaluation of the model is composed of samples crawling from VirusTotal\cite{total2012virustotal} and certified by security expert. In addition, Labeling was automated from the detection results of dozens of AntiVirus engines provided by VirusTotal. The detection results of each AntiVirus engine in VirusTotal are parsed in a meaningful word tokens, and the security expert selected labels from the word tokens. In addition, labels were prioritized according to their importance. This saves the time of the security expert in labeling the malware samples, while achieving accurate labels. Finally, for one sample, we have two types of labels: a representative label and a multi-label. The multi-label includes a representative label. Among the datasets, train set and test set were randomly sampled by 7: 3. And the distribution of samples over the representative label is even.
+The dataset used for learning and evaluation of the model is composed of samples crawling from VirusTotal \cite{total2012virustotal} and certified by security expert. In addition, Labeling was automated from the detection results of dozens of AntiVirus engines provided by VirusTotal. The detection results of each AntiVirus engine in VirusTotal are parsed in a meaningful word tokens, and the security expert selected labels from the word tokens. In addition, labels were prioritized according to their importance. This saves the time of the security expert in labeling the malware samples, while achieving accurate labels. Finally, for one sample, we have two types of labels: a representative label and a multi-label. The multi-label includes a representative label. Among the datasets, train set and test set were randomly sampled by 7: 3. And the distribution of samples over the representative label is even.
 
 \begin{itemize}
-	\item{ \textbf{Dataset 1. PE1300. } Among the more than 50,000 PE samples crawled from VirusTotal, the security expert verified about 2,000 PE samples with 10 labels. Four of the labels are representative labels and the number of samples for the representative label is almost the same.
+	\item{ \textbf{Dataset 1. PE1300. } Among the more than 52,351 PE samples crawled from VirusTotal, the security expert verified about 1,300 PE samples with 11 labels. Four of the labels are representative labels and the number of samples for the representative label is almost the same.
 	}
-	\item{ \textbf{Dataset 2. APK19000. } In the case of APK, there are 19,000 samples from 190,000 samples crawled by VirusTotal, which were verified by expert, and used 83 kinds of labels. Of these, 19 labels are representative labels, and the number of samples for each representative label is 1000.
+	\item{ \textbf{Dataset 2. APK19000. } In the case of APK, there are 19,000 samples from 192,342 samples crawled by VirusTotal, which were verified by expert, and used 83 kinds of labels. Of these, 19 labels are representative labels, and the number of samples for each representative label is 1,000.
 	}
 \end{itemize}
+
+$ $
 
 \textbf{Settings. }
 
 The feature extracter module extracts the malware image feature \cite{nataraj2011malware} and resize it to 224 by 224.
-The network structure of the neural embedder module is convolutional neural netowrk which has five convolutional layers and two fully connected layers using batch normalization \cite{ioffe2015batch}. The previous layer of the last layer used leaky relu\cite{xu2015empirical} as activation function and the rest of the activation function are relu \cite{nair2010rectified}. 
+The network structure of the neural embedder module is convolutional neural netowrk which has five convolutional layers and two fully connected layers using batch normalization \cite{ioffe2015batch}. The previous layer of the last layer used leaky relu \cite{xu2015empirical} as activation function and the rest of the activation function are relu \cite{nair2010rectified}. 
 The malware image \cite{nataraj2011malware} is passed through neural embedder. The convolutional layers extract features to contain local shift invariant characteristics of the malignant region or the region that characterizes the malware.
 
-The hyper parameters used in the experiment are as follows. Adam optimizer\cite{kingma2014adam} was used as the optimizer and the learning rate was 0.001. $\alpha$ in centerloss is 0.1. When learning the PE1300 dataset, we used 0.1 as $\lambda$, which is the ratio of cross-entropy loss and centerloss, and 0.001, when learning APK19000. 
+The hyper parameters used in the experiment are as follows. Adam optimizer \cite{kingma2014adam} was used as the optimizer and the learning rate was 0.001. $\alpha$ in centerloss is 0.1. When learning the PE1300 dataset, we used 0.1 as $\lambda$, which is the ratio of cross-entropy loss and centerloss, and 0.001, when learning APK19000. 
 
 
 \textbf{Models. }
